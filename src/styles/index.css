@@ -1,0 +1,334 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  color: #333;
+}
+
+.app {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+/* Сторінки */
+.page {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* Header */
+.header {
+  text-align: center;
+  margin-bottom: 30px;
+  color: white;
+}
+
+.header__title {
+  font-size: 3rem;
+  margin-bottom: 10px;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.header__subtitle {
+  font-size: 1.2rem;
+  opacity: 0.9;
+}
+
+/* Картки */
+.card {
+  background: white;
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+/* Кнопки */
+.btn {
+  padding: 15px 30px;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+}
+
+.btn--primary {
+  background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+  color: white;
+}
+
+.btn--primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(255,107,107,0.4);
+}
+
+.btn--secondary {
+  background: #f8f9fa;
+  color: #333;
+  border: 2px solid #dee2e6;
+}
+
+.btn--secondary:hover {
+  background: #e9ecef;
+  transform: translateY(-1px);
+}
+
+/* Стартова сторінка */
+.start-page__card {
+  text-align: center;
+}
+
+.start-page__content h2 {
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.rules {
+  margin: 30px 0;
+  text-align: left;
+}
+
+.rules h3 {
+  margin-bottom: 15px;
+  color: #555;
+}
+
+.rules ul {
+  list-style: none;
+  margin-bottom: 30px;
+}
+
+.rules li {
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.rules li:before {
+  content: "🎬";
+  margin-right: 10px;
+}
+
+/* Сторінка гри */
+.game-page__layout {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.game-page__info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.game-page__question-card {
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+}
+
+.game-page__actions {
+  text-align: center;
+}
+
+/* Питання */
+.question {
+  margin-bottom: 30px;
+}
+
+.question__text {
+  font-size: 1.4rem;
+  color: #333;
+  line-height: 1.5;
+}
+
+/* Список відповідей */
+.answer-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1;
+}
+
+.answer-option {
+  display: flex;
+  align-items: center;
+  padding: 15px 20px;
+  border: 2px solid #e9ecef;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.answer-option:hover {
+  border-color: #667eea;
+  background: #f8f9ff;
+  transform: translateX(5px);
+}
+
+.answer-option__letter {
+  background: #667eea;
+  color: white;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  margin-right: 15px;
+}
+
+.answer-option__text {
+  font-size: 1.1rem;
+}
+
+/* Прогрес */
+.progress-info {
+  flex: 1;
+}
+
+.progress-info__text {
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: white;
+}
+
+.progress-info__bar {
+  background: rgba(255,255,255,0.2);
+  border-radius: 10px;
+  height: 8px;
+  overflow: hidden;
+}
+
+.progress-info__fill {
+  background: linear-gradient(90deg, #ff6b6b, #ee5a24);
+  height: 100%;
+  border-radius: 10px;
+  transition: width 0.3s ease;
+}
+
+/* Рахунок */
+.score-board {
+  background: rgba(255,255,255,0.1);
+  padding: 15px 25px;
+  border-radius: 15px;
+  text-align: center;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.2);
+}
+
+.score-board__label {
+  color: white;
+  font-size: 0.9rem;
+  margin-bottom: 5px;
+}
+
+.score-board__value {
+  color: white;
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+/* Сторінка результатів */
+.result-page__card {
+  text-align: center;
+}
+
+.result-page__score {
+  margin: 30px 0;
+}
+
+.score-circle {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.score-value {
+  font-size: 2.5rem;
+  font-weight: bold;
+  line-height: 1;
+}
+
+.score-label {
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+.result-page__message {
+  margin: 20px 0;
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.result-page__details {
+  margin: 20px 0;
+  color: #666;
+}
+
+.result-page__actions {
+  margin-top: 30px;
+}
+
+/* Анімація */
+@keyframes popIn {
+  0% {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Адаптивність */
+@media (max-width: 768px) {
+  .header__title {
+    font-size: 2rem;
+  }
+  
+  .game-page__info {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .progress-info {
+    width: 100%;
+  }
+  
+  .question__text {
+    font-size: 1.2rem;
+  }
+  
+  .card {
+    padding: 20px;
+    margin: 0 10px;
+  }
+}
