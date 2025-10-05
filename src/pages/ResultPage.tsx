@@ -2,21 +2,32 @@ import React from 'react'
 import Header from '../components/Header'
 import Card from '../components/Card'
 import Button from '../components/Button'
+import { useResults } from '../hooks/useResults'
+import type { AnswerHistory } from '../types'
 
 interface ResultPageProps {
   score: number
+  answersHistory: AnswerHistory[]
   onRestart: () => void
 }
 
-const ResultPage: React.FC<ResultPageProps> = ({ score, onRestart }) => {
-  const maxScore = 1000 // Плейсхолдер
-  const percentage = (score / maxScore) * 100
+const ResultPage: React.FC<ResultPageProps> = ({ score, answersHistory, onRestart }) => {
+  const { total, correct, incorrect, skipped, percent } = useResults(answersHistory)
   
   const getResultMessage = () => {
-    if (percentage >= 80) return "Вітаю! Ти справжній кінознавець!"
-    if (percentage >= 60) return "Добре знаєш фільми!"
-    if (percentage >= 40) return "Непогано, але є куди рости!"
-    return "Спробуй ще раз! Ти зможеш краще!"
+    if (correct === total) return "Ідеально! Ти кінознавець екстра-класу! 🏆"
+    if (percent >= 80) return "Вітаю! Ти справжній кінознавець! 🎉"
+    if (percent >= 60) return "Добре знаєш фільми! 👍"
+    if (percent >= 40) return "Непогано, але є куди рости! 💪"
+    return "Спробуй ще раз! Ти зможеш краще! 🎬"
+  }
+
+  const getResultEmoji = () => {
+    if (correct === total) return "🏆"
+    if (percent >= 80) return "⭐"
+    if (percent >= 60) return "👍"
+    if (percent >= 40) return "📚"
+    return "🎬"
   }
 
   return (
@@ -25,7 +36,7 @@ const ResultPage: React.FC<ResultPageProps> = ({ score, onRestart }) => {
       
       <Card className="result-page__card">
         <div className="result-page__content">
-          <h2>Результати гри</h2>
+          <h2>Результати гри {getResultEmoji()}</h2>
           
           <div className="result-page__score">
             <div className="score-circle">
@@ -39,7 +50,44 @@ const ResultPage: React.FC<ResultPageProps> = ({ score, onRestart }) => {
           </div>
           
           <div className="result-page__details">
-            <p>Ти відповів правильно на 7 з 10 запитань</p>
+            <div className="stats-grid">
+              <div className="stat stat--correct">
+                <span className="stat-value">{correct}</span>
+                <span className="stat-label">Правильних</span>
+              </div>
+              <div className="stat stat--incorrect">
+                <span className="stat-value">{incorrect}</span>
+                <span className="stat-label">Неправильних</span>
+              </div>
+              <div className="stat stat--skipped">
+                <span className="stat-value">{skipped}</span>
+                <span className="stat-label">Пропущено</span>
+              </div>
+              <div className="stat stat--total">
+                <span className="stat-value">{total}</span>
+                <span className="stat-label">Всього</span>
+              </div>
+              <div className="stat stat--percent">
+                <span className="stat-value">{percent}%</span>
+                <span className="stat-label">Успішність</span>
+              </div>
+            </div>
+            
+            <div className="results-breakdown">
+              <h4>Детальна статистика:</h4>
+              <ul>
+                <li>✅ Правильних відповідей: <strong>{correct}</strong></li>
+                <li>❌ Неправильних відповідей: <strong>{incorrect}</strong></li>
+                <li>⏰ Пропущених питань: <strong>{skipped}</strong></li>
+                <li>📊 Загальна успішність: <strong>{percent}%</strong></li>
+              </ul>
+            </div>
+            
+            <p className="summary">
+              {correct > 0 ? `Ти правильно відповів на ${correct} з ${total} запитань` : 'На жаль, ти не дав жодної правильної відповіді'}
+              {skipped > 0 && ` (пропущено ${skipped} питань)`}
+              {incorrect > 0 && `, неправильних відповідей: ${incorrect}`}
+            </p>
           </div>
           
           <div className="result-page__actions">
