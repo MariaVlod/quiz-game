@@ -1,4 +1,4 @@
-import type { Question } from "../types";
+import type { Question } from '../types';
 
 
 export function shuffleArray<T>(array: T[]): T[] {
@@ -10,9 +10,36 @@ export function shuffleArray<T>(array: T[]): T[] {
   return shuffled;
 }
 
+
 export function shuffleQuestions(questions: Question[]): Question[] {
-  return shuffleArray(questions).map(question => ({
+  return questions.map(question => ({
     ...question,
     options: shuffleArray(question.options)
   }));
+}
+
+
+export function getRandomQuestionsByDifficulty(
+  allQuestions: Question[], 
+  difficulty: string, 
+  count: number
+): Question[] {
+  // Фільтруємо питання за складністю
+  const filteredQuestions = allQuestions.filter(q => q.difficulty === difficulty);
+  
+  if (filteredQuestions.length === 0) {
+    return [];
+  }
+  
+  
+  const shuffled = shuffleArray(filteredQuestions);
+  return shuffled.slice(0, Math.min(count, shuffled.length));
+}
+
+export function getMixedRandomQuestions(
+  allQuestions: Question[], 
+  count: number
+): Question[] {
+  const shuffled = shuffleArray(allQuestions);
+  return shuffled.slice(0, Math.min(count, shuffled.length));
 }

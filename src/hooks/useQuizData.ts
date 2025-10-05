@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
-import type{ Question, QuizFilterOptions } from '../types';
+import type  { Question, QuizFilterOptions } from '../types';
 import { mockQuestions } from '../data/mockQuestions';
-import { shuffleQuestions } from '../utils/shuffle';
+import { shuffleArray, shuffleQuestions } from '../utils/shuffle';
 
 export const useQuizData = (initialOptions?: QuizFilterOptions) => {
   const [questions, setQuestions] = useState<Question[]>([]);
@@ -13,39 +13,53 @@ export const useQuizData = (initialOptions?: QuizFilterOptions) => {
       setLoading(true);
       setError(null);
       
-      // симуляція завантаження з API
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Симуляція завантаження з API
+      await new Promise(resolve => setTimeout(resolve, 500));
       
-      let filteredQuestions = mockQuestions;
+      let availableQuestions = [...mockQuestions];
 
-      // фільтрація за категорією
-      if (options?.category) {
-        filteredQuestions = filteredQuestions.filter(
-          q => q.category === options.category
-        );
-      }
-
-      // фільтрація за складністю
-      if (options?.difficulty) {
-        filteredQuestions = filteredQuestions.filter(
+      // Фільтрація за складністю
+      if (options?.difficulty && options.difficulty !== 'all') {
+        availableQuestions = availableQuestions.filter(
           q => q.difficulty === options.difficulty
         );
+        console.log(`Фільтрація за складністю: ${options.difficulty}, доступно: ${availableQuestions.length} питань`);
       }
 
-      // обмеження кількості
-      if (options?.count) {
-        filteredQuestions = filteredQuestions.slice(0, options.count);
-      }
-
-      if (filteredQuestions.length === 0) {
+      if (availableQuestions.length === 0) {
         throw new Error('Не знайдено питань за обраними критеріями');
       }
 
-      // перемішування питань та варіантів відповідей
-      const shuffledQuestions = shuffleQuestions(filteredQuestions);
-      setQuestions(shuffledQuestions);
+      // ВИПАДКОВИЙ ВІДБІР ПИТАНЬ
+      let selectedQuestions: Question[];
+      const count = options?.count || 5;
+      
+      if (availableQuestions.length <= count) {
+        // Якщо доступних питань менше або рівно потрібній кількості - беремо всі
+        selectedQuestions = [...availableQuestions];
+      } else {
+        // Випадковий вибір питань з доступних
+        const shuffled = shuffleArray(availableQuestions);
+        selectedQuestions = shuffled.slice(0, count);
+      }
+
+      // Перемішування варіантів відповідей у вибраних питаннях
+      const finalQuestions = shuffleQuestions(selectedQuestions);
+      
+      // Логування для дебагу
+      console.log('Завантажені питання:', {
+        обранаСкладність: options?.difficulty,
+        доступноПитань: availableQuestions.length,
+        обраноПитань: finalQuestions.length,
+        складності: finalQuestions.map(q => q.difficulty),
+        питанняIDs: finalQuestions.map(q => q.id)
+      });
+      
+      setQuestions(finalQuestions);
     } catch (err) {
-      setError(err instanceof Error ? err : new Error('Помилка завантаження питань'));
+      const error = err instanceof Error ? err : new Error('Помилка завантаження питань');
+      setError(error);
+      console.error('Помилка завантаження питань:', error);
     } finally {
       setLoading(false);
     }
@@ -55,7 +69,7 @@ export const useQuizData = (initialOptions?: QuizFilterOptions) => {
     loadQuestions(options);
   }, [loadQuestions]);
 
-  // завантаження питань при першому рендері
+  // Завантаження питань при першому рендері
   useEffect(() => {
     loadQuestions(initialOptions);
   }, [loadQuestions, initialOptions]);
