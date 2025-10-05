@@ -14,6 +14,7 @@ interface UseGameFlowReturn {
   
   // Методи
   selectOption: (optionId: string) => void;
+  skipQuestion: () => void; // Новий метод для пропуску питання
   next: () => void;
   restart: () => void;
   getProgress: () => { current: number; total: number };
@@ -48,10 +49,26 @@ export const useGameFlow = (
       questionId: currentQuestion.id,
       selectedOptionId: optionId,
       isCorrect,
-      timeTaken: 0 // Можна додати таймер
+      timeTaken: 0
     };
 
     setAnswersHistory(prev => [...prev, newAnswer]);
+  }, [currentQuestion, isAnswerLocked]);
+
+  // Новий метод для пропуску питання (коли час вийшов)
+  const skipQuestion = useCallback(() => {
+    if (isAnswerLocked || !currentQuestion) return;
+
+    // Додаємо пропущену відповідь в історію
+    const skippedAnswer: AnswerHistory = {
+      questionId: currentQuestion.id,
+      selectedOptionId: null, // null означає, що питання пропущено
+      isCorrect: false,
+      timeTaken: 0
+    };
+
+    setAnswersHistory(prev => [...prev, skippedAnswer]);
+    setIsAnswerLocked(true);
   }, [currentQuestion, isAnswerLocked]);
 
   const next = useCallback(() => {
@@ -77,7 +94,7 @@ export const useGameFlow = (
     total: totalQuestions
   }), [currentIndex, totalQuestions]);
 
-  // Автоматичне завершення гри, коли всі питання відповідені
+  // Автоматичне завершення гри, коли всі питання відповідені або пропущені
   useEffect(() => {
     if (answersHistory.length === totalQuestions && totalQuestions > 0) {
       setIsFinished(true);
@@ -96,6 +113,7 @@ export const useGameFlow = (
     
     // Методи
     selectOption,
+    skipQuestion, // Додаємо новий метод
     next,
     restart,
     getProgress

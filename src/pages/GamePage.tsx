@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import Header from '../components/Header'
 import Card from '../components/Card'
 import Button from '../components/Button'
@@ -24,34 +24,63 @@ const GamePage: React.FC<GamePageProps> = ({ questions, onEndGame }) => {
     isFinished,
     isAnswerLocked,
     selectOption,
+    skipQuestion, // Додаємо новий метод
     next,
     getProgress
   } = useGameFlow(questions)
 
-  const { timeLeft, start, reset } = useTimer({
-    initialSeconds: 30,
-    onExpire: () => {
-      // Автоматичний перехід до наступного питання при закінченні часу
-      if (!isAnswerLocked) {
-        selectOption('') // Позначаємо як пропущене
-      }
-      setTimeout(next, 1000)
-    },
+  // Використовуємо useRef для уникнення повторних викликів
+  const timeoutRef = useRef<number | null>(null);
+
+  const handleTimeExpire = React.useCallback(() => {
+    console.log('⏰ Час вийшов! Автоматичний перехід...');
+    
+    // Очищаємо попередній таймаут, якщо він є
+    if (timeoutRef.current !== null) {
+      clearTimeout(timeoutRef.current);
+    }
+
+    if (!isAnswerLocked && currentQuestion) {
+      console.log('Користувач не встиг відповісти на питання:', currentQuestion.id);
+      // Використовуємо новий метод для пропуску питання
+      skipQuestion();
+    }
+    
+    // Затримка для того, щоб користувач побачив, що час вийшов
+    timeoutRef.current = window.setTimeout(() => {
+      console.log('Перехід до наступного питання...');
+      next();
+      timeoutRef.current = null;
+    }, 1000);
+  }, [isAnswerLocked, currentQuestion, skipQuestion, next]);
+
+  const { timeLeft, reset, pause } = useTimer({
+    initialSeconds: 10,
+    onExpire: handleTimeExpire,
     autoStart: true
   })
 
   const handleAnswerSelect = (optionId: string) => {
+    console.log('Вибір відповіді:', optionId);
     selectOption(optionId)
+    pause(); // Зупиняємо таймер після вибору відповіді
+    
+    // Очищаємо таймаут автоматичного переходу, якщо користувач встиг відповісти
+    if (timeoutRef.current !== null) {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    }
   }
 
   const handleNext = () => {
+    console.log('Перехід до наступного питання');
     next()
-    reset(30) // Скидання таймера для наступного питання
   }
 
   // Автоматичне завершення гри
   useEffect(() => {
     if (isFinished) {
+      console.log('🎮 Гра завершена! Результат:', score, 'Історія:', answersHistory);
       onEndGame(score, answersHistory)
     }
   }, [isFinished, score, answersHistory, onEndGame])
@@ -59,10 +88,26 @@ const GamePage: React.FC<GamePageProps> = ({ questions, onEndGame }) => {
   // Перезапуск таймера при зміні питання
   useEffect(() => {
     if (currentQuestion) {
-      reset(30)
-      start()
+      console.log('🔄 Нове питання, перезапуск таймера:', currentQuestion.id);
+      
+      // Очищаємо таймаут при зміні питання
+      if (timeoutRef.current !== null) {
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
+      }
+      
+      reset(10);
     }
-  }, [currentQuestion, reset, start])
+  }, [currentQuestion, reset])
+
+  // Очистка при розмонтуванні
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current !== null) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
 
   if (!currentQuestion) {
     return (
@@ -88,8 +133,8 @@ const GamePage: React.FC<GamePageProps> = ({ questions, onEndGame }) => {
             total={progress.total} 
           />
           <ScoreBoard score={score} />
-          <div className="timer">
-            Час: {timeLeft}с
+          <div className={`timer ${timeLeft <= 3 ? 'timer--warning' : ''}`}>
+            Час: {timeLeft}с {!isAnswerLocked && timeLeft > 0 && '⏳'}
           </div>
         </div>
         
@@ -103,12 +148,27 @@ const GamePage: React.FC<GamePageProps> = ({ questions, onEndGame }) => {
             onAnswerSelect={handleAnswerSelect}
             disabled={isAnswerLocked}
           />
+
+          {/* Дебаг інформація */}
+          <div style={{ 
+            marginTop: '20px', 
+            padding: '10px', 
+            background: '#f5f5f5', 
+            borderRadius: '5px',
+            fontSize: '12px',
+            color: '#666'
+          }}>
+            Дебаг: Питання {currentQuestion.id} ({progress.current}/{progress.total}) | 
+            Відповідей в історії: {answersHistory.length} | 
+            isAnswerLocked = {isAnswerLocked.toString()} | 
+            Час: {timeLeft}с
+          </div>
         </Card>
         
         <div className="game-page__actions">
           {isAnswerLocked && (
             <Button onClick={handleNext}>
-              {progress.current === progress.total ? 'Завершити' : 'Наступне питання'}
+              {progress.current === progress.total ? 'Завершити гру' : 'Наступне питання →'}
             </Button>
           )}
         </div>

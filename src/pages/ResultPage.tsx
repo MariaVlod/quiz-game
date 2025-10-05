@@ -12,9 +12,10 @@ interface ResultPageProps {
 }
 
 const ResultPage: React.FC<ResultPageProps> = ({ score, answersHistory, onRestart }) => {
-  const { total, correct, incorrect, percent } = useResults(answersHistory)
+  const { total, correct, incorrect, skipped, percent } = useResults(answersHistory)
   
   const getResultMessage = () => {
+    if (correct === total) return "Ідеально! Ти кінознавець екстра-класу! 🏆"
     if (percent >= 80) return "Вітаю! Ти справжній кінознавець! 🎉"
     if (percent >= 60) return "Добре знаєш фільми! 👍"
     if (percent >= 40) return "Непогано, але є куди рости! 💪"
@@ -22,9 +23,10 @@ const ResultPage: React.FC<ResultPageProps> = ({ score, answersHistory, onRestar
   }
 
   const getResultEmoji = () => {
-    if (percent >= 80) return "🏆"
-    if (percent >= 60) return "⭐"
-    if (percent >= 40) return "👍"
+    if (correct === total) return "🏆"
+    if (percent >= 80) return "⭐"
+    if (percent >= 60) return "👍"
+    if (percent >= 40) return "📚"
     return "🎬"
   }
 
@@ -49,22 +51,42 @@ const ResultPage: React.FC<ResultPageProps> = ({ score, answersHistory, onRestar
           
           <div className="result-page__details">
             <div className="stats-grid">
-              <div className="stat">
+              <div className="stat stat--correct">
                 <span className="stat-value">{correct}</span>
                 <span className="stat-label">Правильних</span>
               </div>
-              <div className="stat">
+              <div className="stat stat--incorrect">
                 <span className="stat-value">{incorrect}</span>
                 <span className="stat-label">Неправильних</span>
               </div>
-              <div className="stat">
+              <div className="stat stat--skipped">
+                <span className="stat-value">{skipped}</span>
+                <span className="stat-label">Пропущено</span>
+              </div>
+              <div className="stat stat--total">
+                <span className="stat-value">{total}</span>
+                <span className="stat-label">Всього</span>
+              </div>
+              <div className="stat stat--percent">
                 <span className="stat-value">{percent}%</span>
                 <span className="stat-label">Успішність</span>
               </div>
             </div>
             
+            <div className="results-breakdown">
+              <h4>Детальна статистика:</h4>
+              <ul>
+                <li>✅ Правильних відповідей: <strong>{correct}</strong></li>
+                <li>❌ Неправильних відповідей: <strong>{incorrect}</strong></li>
+                <li>⏰ Пропущених питань: <strong>{skipped}</strong></li>
+                <li>📊 Загальна успішність: <strong>{percent}%</strong></li>
+              </ul>
+            </div>
+            
             <p className="summary">
-              Ти відповів правильно на {correct} з {total} запитань
+              {correct > 0 ? `Ти правильно відповів на ${correct} з ${total} запитань` : 'На жаль, ти не дав жодної правильної відповіді'}
+              {skipped > 0 && ` (пропущено ${skipped} питань)`}
+              {incorrect > 0 && `, неправильних відповідей: ${incorrect}`}
             </p>
           </div>
           

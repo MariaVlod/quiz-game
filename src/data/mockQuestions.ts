@@ -55,6 +55,32 @@ export const mockQuestions: Question[] = [
   },
   {
     id: '5',
+    text: 'Яка акторка зіграла Герміону Грейнджер у фільмах про Гаррі Поттера?',
+    options: [
+      { id: 'a', text: 'Емма Вотсон' },
+      { id: 'b', text: 'Емма Стоун' },
+      { id: 'c', text: 'Емілія Кларк' },
+      { id: 'd', text: 'Дженніфер Лоуренс' }
+    ],
+    correctOptionId: 'a',
+    category: 'movies',
+    difficulty: 'easy'
+  },
+  {
+    id: '6',
+    text: 'Яка акторка зіграла Герміону Грейнджер у фільмах про Гаррі Поттера?',
+    options: [
+      { id: 'a', text: 'Емма Вотсон' },
+      { id: 'b', text: 'Емма Стоун' },
+      { id: 'c', text: 'Емілія Кларк' },
+      { id: 'd', text: 'Дженніфер Лоуренс' }
+    ],
+    correctOptionId: 'a',
+    category: 'movies',
+    difficulty: 'easy'
+  },
+  {
+    id: '7',
     text: 'Скільки Оскарів отримав фільм "The Lord of the Rings: The Return of the King"?',
     options: [
       { id: 'a', text: '8' },
