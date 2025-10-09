@@ -2,7 +2,6 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { useGameSettings } from '../context/GameSettingsContext';
 
 interface UseTimerProps {
-  initialSeconds?: number;
   onExpire?: () => void;
   autoStart?: boolean;
 }
@@ -12,29 +11,18 @@ interface UseTimerReturn {
   isRunning: boolean;
   start: () => void;
   pause: () => void;
-  reset: (seconds?: number) => void;
+  reset: () => void;
 }
 
-export const useTimer = (props: UseTimerProps): UseTimerReturn => {
+export const useTimer = ({
+  onExpire,
+  autoStart = false
+}: UseTimerProps): UseTimerReturn => {
   const { settings } = useGameSettings();
-  const {
-    initialSeconds = settings.timerDuration,
-    onExpire,
-    autoStart = false
-  } = props;
-
-  const [timeLeft, setTimeLeft] = useState<number>(initialSeconds);
-  const [isRunning, setIsRunning] = useState<boolean>(false);
+  const [timeLeft, setTimeLeft] = useState<number>(settings.timerDuration);
+  const [isRunning, setIsRunning] = useState<boolean>(autoStart);
   const intervalRef = useRef<number | null>(null);
-  const onExpireRef = useRef(onExpire);
-  const hasExpiredRef = useRef(false);
 
-  // 🔄 Оновлюємо callback при зміні onExpire
-  useEffect(() => {
-    onExpireRef.current = onExpire;
-  }, [onExpire]);
-
-  // 🧹 Очищення інтервалу
   const clearTimerInterval = useCallback(() => {
     if (intervalRef.current !== null) {
       clearInterval(intervalRef.current);
@@ -42,64 +30,62 @@ export const useTimer = (props: UseTimerProps): UseTimerReturn => {
     }
   }, []);
 
-  // ▶️ Запуск таймера
   const start = useCallback(() => {
     if (timeLeft > 0 && !isRunning) {
+      console.log('▶️ Таймер запущено');
       setIsRunning(true);
-      hasExpiredRef.current = false;
     }
   }, [timeLeft, isRunning]);
 
-  // ⏸️ Пауза
   const pause = useCallback(() => {
-    setIsRunning(false);
-    clearTimerInterval();
-  }, [clearTimerInterval]);
-
-  // 🔁 Скидання
-  const reset = useCallback(
-    (seconds?: number) => {
-      pause();
-      setTimeLeft(seconds ?? settings.timerDuration);
-      hasExpiredRef.current = false;
-      setIsRunning(true);
-    },
-    [pause, settings.timerDuration]
-  );
-
-  // ⏳ Основна логіка таймера
-  useEffect(() => {
-    if (isRunning && timeLeft > 0) {
-      intervalRef.current = window.setInterval(() => {
-        setTimeLeft(prev => {
-          const newTime = prev - 1;
-          if (newTime <= 0 && !hasExpiredRef.current) {
-            hasExpiredRef.current = true;
-            setIsRunning(false);
-            onExpireRef.current?.();
-            return 0;
-          }
-          return newTime;
-        });
-      }, 1000);
-    } else {
+    if (isRunning) {
+      console.log('⏸️ Таймер зупинено');
+      setIsRunning(false);
       clearTimerInterval();
     }
+  }, [isRunning, clearTimerInterval]);
 
-    return clearTimerInterval;
-  }, [isRunning, timeLeft, clearTimerInterval]);
-
-  // 🚀 Автоматичний запуск при монтуванні
-  useEffect(() => {
-    if (autoStart && timeLeft > 0) {
-      start();
-    }
-  }, [autoStart, start, timeLeft]);
-
-  // 🧩 Якщо змінюються налаштування гри — оновити таймер
-  useEffect(() => {
+  const reset = useCallback(() => {
+    console.log('🔄 Таймер скинуто до', settings.timerDuration, 'секунд');
+    clearTimerInterval();
+    setIsRunning(false);
     setTimeLeft(settings.timerDuration);
-  }, [settings.timerDuration]);
+    
+    if (autoStart) {
+      // Невелика затримка перед автоматичним запуском
+      setTimeout(() => {
+        setIsRunning(true);
+      }, 100);
+    }
+  }, [settings.timerDuration, autoStart, clearTimerInterval]);
+
+  useEffect(() => {
+    if (isRunning && timeLeft > 0) {
+      console.log('⏰ Таймер активний, час:', timeLeft);
+      
+      intervalRef.current = window.setInterval(() => {
+        setTimeLeft(prev => {
+          if (prev <= 1) {
+            console.log('⏰ Час вийшов!');
+            setIsRunning(false);
+            clearTimerInterval();
+            onExpire?.();
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    }
+
+    return () => {
+      clearTimerInterval();
+    };
+  }, [isRunning, timeLeft, onExpire, clearTimerInterval]);
+
+  // Скидання таймера при зміні налаштувань
+  useEffect(() => {
+    reset();
+  }, [settings.timerDuration, reset]);
 
   return {
     timeLeft,

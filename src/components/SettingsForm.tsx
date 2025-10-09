@@ -15,13 +15,12 @@ const validationSchema = Yup.object({
   difficulty: Yup.string().oneOf(['easy', 'medium', 'hard', 'all']).required('Оберіть складність'),
   count: Yup.number()
     .min(1, 'Мінімум 1 питання')
-    .max(20, 'Максимум 20 питань')
+    .max(15, 'Максимум 15 питань')
     .required('Вкажіть кількість питань'),
   timerDuration: Yup.number()
     .min(5, 'Мінімум 5 секунд')
     .max(60, 'Максимум 60 секунд')
-    .required('Вкажіть час на відповідь'),
-  category: Yup.string().required('Оберіть категорію')
+    .required('Вкажіть час на відповідь')
 });
 
 const SettingsForm: React.FC<SettingsFormProps> = ({ 
@@ -40,17 +39,6 @@ const SettingsForm: React.FC<SettingsFormProps> = ({
       >
         {({ isSubmitting, values }) => (
           <Form className="form">
-            <div className="form-group">
-              <label htmlFor="category">Категорія:</label>
-              <Field as="select" id="category" name="category">
-                <option value="movies">Фільми</option>
-                <option value="science">Наука</option>
-                <option value="history">Історія</option>
-                <option value="sports">Спорт</option>
-              </Field>
-              <ErrorMessage name="category" component="div" className="error-message" />
-            </div>
-
             <div className="form-group">
               <label htmlFor="difficulty">Складність:</label>
               <Field as="select" id="difficulty" name="difficulty">

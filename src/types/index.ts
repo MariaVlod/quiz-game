@@ -34,7 +34,6 @@ export interface GameSettings {
   difficulty: 'easy' | 'medium' | 'hard' | 'all';
   count: number;
   timerDuration: number;
-  category: string;
 }
 
 export interface GameSettingsContextType {

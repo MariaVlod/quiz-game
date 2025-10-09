@@ -6,8 +6,7 @@ import type { GameSettings, GameSettingsContextType } from '../types';
 const defaultSettings: GameSettings = {
   difficulty: 'all',
   count: 5,
-  timerDuration: 10,
-  category: 'movies'
+  timerDuration: 10
 };
 
 const GameSettingsContext = createContext<GameSettingsContextType | undefined>(undefined);

@@ -28,55 +28,85 @@ const GamePage: React.FC<GamePageProps> = ({ questions, onEndGame, onNewGame }) 
     selectOption,
     skipQuestion,
     next,
-    restart
+    restart,
+    getProgress
   } = useGameFlow(questions);
 
   const [showGameOverModal, setShowGameOverModal] = useState(false);
-
   const timeoutRef = useRef<number | null>(null);
 
   const handleTimeExpire = React.useCallback(() => {
-    if (!isAnswerLocked && currentQuestion) {
-      skipQuestion();
-    }
-
-    timeoutRef.current = window.setTimeout(() => {
-      next();
-      timeoutRef.current = null;
-    }, 1000);
-  }, [isAnswerLocked, currentQuestion, skipQuestion, next]);
-
-  const { timeLeft, reset, pause } = useTimer({
-    onExpire: handleTimeExpire,
-    autoStart: true
-  });
-
-  const handleAnswerSelect = (optionId: string) => {
-    selectOption(optionId);
-    pause();
+    console.log('⏰ Час вийшов! Автоматичний пропуск питання...');
 
     if (timeoutRef.current !== null) {
       clearTimeout(timeoutRef.current);
       timeoutRef.current = null;
     }
+
+    if (!isAnswerLocked && currentQuestion) {
+      console.log('Користувач не встиг відповісти на питання:', currentQuestion.id);
+      skipQuestion();
+      
+      timeoutRef.current = window.setTimeout(() => {
+        console.log('➡️ Автоматичний перехід до наступного питання...');
+        next();
+        timeoutRef.current = null;
+      }, 1500);
+    }
+  }, [isAnswerLocked, currentQuestion, skipQuestion, next]);
+
+  const { timeLeft, reset, pause, isRunning } = useTimer({
+    onExpire: handleTimeExpire,
+    autoStart: true
+  });
+
+  const handleAnswerSelect = (optionId: string) => {
+    console.log('🎯 Обробка відповіді:', optionId);
+    console.log('⏰ Стан таймера перед відповіддю:', { timeLeft, isRunning });
+    
+  
+    selectOption(optionId);
+    
+    
+    console.log('⏸️ Спроба зупинити таймер...');
+    pause();
+    
+    
+    setTimeout(() => {
+      console.log('⏰ Стан таймера після pause:', { timeLeft, isRunning });
+    }, 10);
+
+    
+    if (timeoutRef.current !== null) {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    }
+
+    setTimeout(() => {
+      console.log('🔄 Відповідь оброблена, стан isAnswerLocked:', true);
+    }, 100);
   };
 
   const handleNext = () => {
+    console.log('➡️ Перехід до наступного питання');
     next();
   };
 
   const handleRestart = () => {
+    console.log('🔄 Перезапуск гри');
     restart();
     setShowGameOverModal(false);
   };
 
   const handleNewGame = () => {
+    console.log('Нова гра');
     setShowGameOverModal(false);
     onNewGame();
   };
 
   useEffect(() => {
     if (isFinished) {
+      console.log('Гра завершена!');
       setShowGameOverModal(true);
       onEndGame(score, answersHistory);
     }
@@ -84,6 +114,8 @@ const GamePage: React.FC<GamePageProps> = ({ questions, onEndGame, onNewGame }) 
 
   useEffect(() => {
     if (currentQuestion) {
+      console.log('🔄 Нове питання, перезапуск таймера:', currentQuestion.id);
+
       if (timeoutRef.current !== null) {
         clearTimeout(timeoutRef.current);
         timeoutRef.current = null;
@@ -111,10 +143,7 @@ const GamePage: React.FC<GamePageProps> = ({ questions, onEndGame, onNewGame }) 
     );
   }
 
- const progress = {
-  current: answersHistory.length + 1,
-  total: questions.length
-};
+  const progress = getProgress();
 
   return (
     <div className="page game-page">
@@ -128,7 +157,7 @@ const GamePage: React.FC<GamePageProps> = ({ questions, onEndGame, onNewGame }) 
           />
           <ScoreBoard score={score}/>
           <div className={`timer ${timeLeft <= 3 ? 'timer--warning' : ''}`}>
-            ⏱️ {timeLeft}с
+            ⏱️ {timeLeft}с {!isRunning && '⏸️'}
           </div>
         </div>
 
@@ -142,6 +171,22 @@ const GamePage: React.FC<GamePageProps> = ({ questions, onEndGame, onNewGame }) 
             onAnswerSelect={handleAnswerSelect}
             disabled={isAnswerLocked}
           />
+
+          {/* Дебаг інформація */}
+          <div style={{
+            marginTop: '20px',
+            padding: '10px',
+            background: '#f5f5f5',
+            borderRadius: '5px',
+            fontSize: '12px',
+            color: '#666'
+          }}>
+            Дебаг: Питання {currentQuestion.id} ({progress.current}/{progress.total}) | 
+            Відповідей: {answersHistory.length} | 
+            Заблоковано: {isAnswerLocked.toString()} | 
+            Час: {timeLeft}с | 
+            Таймер активний: {isRunning.toString()}
+          </div>
         </Card>
 
         <div className="game-page__actions">

@@ -1,11 +1,11 @@
 import { useState, useEffect, useCallback } from 'react';
-import type { Question } from '../types';
+import type { Question, QuizFilterOptions } from '../types';
 import { mockQuestions } from '../data/mockQuestions';
 import { shuffleArray, shuffleQuestions } from '../utils/shuffle';
-import { useGameSettings } from '../context/GameSettingsContext';
+import { useGameSettings } from '../context/GameSettingsContext'; // Додаємо імпорт контексту
 
 export const useQuizData = () => {
-  const { settings } = useGameSettings();
+  const { settings } = useGameSettings(); // Отримуємо налаштування з контексту
   const [questions, setQuestions] = useState<Question[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error | null>(null);
@@ -15,66 +15,63 @@ export const useQuizData = () => {
       setLoading(true);
       setError(null);
 
-      // Симуляція запиту до API
+      // Симуляція завантаження з API
       await new Promise(resolve => setTimeout(resolve, 500));
 
-      let filteredQuestions = [...mockQuestions];
+      let availableQuestions = [...mockQuestions];
 
-      // 🔹 Фільтрація за категорією
-      if (settings.category && settings.category !== 'all') {
-        filteredQuestions = filteredQuestions.filter(
-          q => q.category === settings.category
-        );
-      }
-
-      // 🔹 Фільтрація за складністю
+      // Фільтрація за складністю з налаштувань
       if (settings.difficulty && settings.difficulty !== 'all') {
-        filteredQuestions = filteredQuestions.filter(
+        availableQuestions = availableQuestions.filter(
           q => q.difficulty === settings.difficulty
         );
+        console.log(' Фільтрація за складністю:', settings.difficulty, 'доступно:', availableQuestions.length, 'питань');
       }
 
-      // 🔹 Випадковий вибір питань
-      let selectedQuestions: Question[];
-      const count = settings.count || 5;
-
-      if (filteredQuestions.length <= count) {
-        selectedQuestions = [...filteredQuestions];
-      } else {
-        const shuffled = shuffleArray(filteredQuestions);
-        selectedQuestions = shuffled.slice(0, count);
-      }
-
-      if (selectedQuestions.length === 0) {
+      if (availableQuestions.length === 0) {
         throw new Error('Не знайдено питань за обраними критеріями');
       }
 
-      // 🔹 Перемішування варіантів відповідей
+  
+      let selectedQuestions: Question[];
+      const count = settings.count || 5;
+
+      if (availableQuestions.length <= count) {
+        selectedQuestions = [...availableQuestions];
+      } else {
+        const shuffled = shuffleArray(availableQuestions);
+        selectedQuestions = shuffled.slice(0, count);
+      }
+
+  
       const finalQuestions = shuffleQuestions(selectedQuestions);
 
+      // Логування для дебагу
       console.log('✅ Завантажені питання:', {
-        category: settings.category,
-        difficulty: settings.difficulty,
-        count: finalQuestions.length,
-        ids: finalQuestions.map(q => q.id)
+        обранаСкладність: settings.difficulty,
+        кількістьПитань: settings.count,
+        доступноПитань: availableQuestions.length,
+        обраноПитань: finalQuestions.length,
+        складності: finalQuestions.map(q => q.difficulty),
+        питанняIDs: finalQuestions.map(q => q.id)
       });
 
       setQuestions(finalQuestions);
     } catch (err) {
-      setError(err instanceof Error ? err : new Error('Помилка завантаження питань'));
-      console.error('❌ Помилка завантаження питань:', err);
+      const error = err instanceof Error ? err : new Error('Помилка завантаження питань');
+      setError(error);
+      console.error('❌ Помилка завантаження питань:', error);
     } finally {
       setLoading(false);
     }
-  }, [settings]);
+  }, [settings]); 
 
-  // Завантаження при зміні налаштувань
-  useEffect(() => {
+  const reload = useCallback(() => {
     loadQuestions();
   }, [loadQuestions]);
 
-  // Додаткова функція для ручного перезапуску
-  const reload = useCallback(() => {
+  
+  useEffect(() => {
     loadQuestions();
   }, [loadQuestions]);
 

@@ -19,14 +19,20 @@ const StartPage: React.FC<StartPageProps> = ({ onStart }) => {
 
   const handleStart = () => {
     if (questions.length > 0) {
+      console.log('🎮 Початок гри з питаннями:', {
+        кількість: questions.length,
+        складності: questions.map(q => q.difficulty),
+        налаштування: settings
+      });
       onStart(questions);
     }
   };
 
   const handleSettingsSubmit = (newSettings: GameSettings) => {
+    console.log('⚙️ Оновлення налаштувань:', newSettings);
     updateSettings(newSettings);
     setShowSettings(false);
-    reload();
+    // reload() викличеться автоматично через useEffect в useQuizData
   };
 
   const handleShowSettings = () => {
@@ -76,16 +82,25 @@ const StartPage: React.FC<StartPageProps> = ({ onStart }) => {
             </div>
           )}
 
+          {!loading && !error && questions.length === 0 && (
+            <div className="empty-state">
+              <p>Не знайдено питань за обраними критеріями</p>
+              <Button onClick={() => reload()}>
+                Оновити
+              </Button>
+            </div>
+          )}
+
           <div className="start-actions">
             <Button onClick={handleShowSettings} variant="secondary">
-              ⚙️ Налаштування
+              Налаштування
             </Button>
             
             <Button 
               onClick={handleStart} 
               disabled={loading || questions.length === 0}
             >
-              {loading ? 'Завантаження...' : '🎮 Почати гру'}
+              {loading ? 'Завантаження...' : ' Почати гру'}
             </Button>
           </div>
         </div>
