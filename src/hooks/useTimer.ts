@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { useGameSettings } from '../context/GameSettingsContext';
 
 interface UseTimerProps {
-  initialSeconds: number;
   onExpire?: () => void;
   autoStart?: boolean;
 }
@@ -11,24 +11,17 @@ interface UseTimerReturn {
   isRunning: boolean;
   start: () => void;
   pause: () => void;
-  reset: (seconds?: number) => void;
+  reset: () => void;
 }
 
 export const useTimer = ({
-  initialSeconds,
   onExpire,
   autoStart = false
 }: UseTimerProps): UseTimerReturn => {
-  const [timeLeft, setTimeLeft] = useState<number>(initialSeconds);
-  const [isRunning, setIsRunning] = useState<boolean>(false);
+  const { settings } = useGameSettings();
+  const [timeLeft, setTimeLeft] = useState<number>(settings.timerDuration);
+  const [isRunning, setIsRunning] = useState<boolean>(autoStart);
   const intervalRef = useRef<number | null>(null);
-  const onExpireRef = useRef(onExpire);
-  const hasExpiredRef = useRef(false); // Новий ref для відстеження стану завершення
-
-  // Оновлюємо ref при зміні onExpire
-  useEffect(() => {
-    onExpireRef.current = onExpire;
-  });
 
   const clearTimerInterval = useCallback(() => {
     if (intervalRef.current !== null) {
@@ -38,65 +31,61 @@ export const useTimer = ({
   }, []);
 
   const start = useCallback(() => {
-    console.log('Starting timer, timeLeft:', timeLeft, 'isRunning:', isRunning);
     if (timeLeft > 0 && !isRunning) {
+      console.log('▶️ Таймер запущено');
       setIsRunning(true);
-      hasExpiredRef.current = false; // Скидаємо стан завершення
     }
   }, [timeLeft, isRunning]);
 
   const pause = useCallback(() => {
-    console.log('Pausing timer');
-    setIsRunning(false);
-    clearTimerInterval();
-  }, [clearTimerInterval]);
-
-  const reset = useCallback((seconds?: number) => {
-    console.log('Resetting timer to:', seconds ?? initialSeconds);
-    pause();
-    setTimeLeft(seconds ?? initialSeconds);
-    hasExpiredRef.current = false; // Скидаємо стан завершення при скиданні
-    // Автоматично запускаємо після скидання
-    setIsRunning(true);
-  }, [initialSeconds, pause]);
-
-  // Основний ефект для запуску/зупинки таймера
-  useEffect(() => {
-    console.log('Timer effect - isRunning:', isRunning, 'timeLeft:', timeLeft);
-    
-    if (isRunning && timeLeft > 0) {
-      console.log('Setting up interval');
-      intervalRef.current = window.setInterval(() => {
-        setTimeLeft(prev => {
-          const newTime = prev - 1;
-          console.log('Timer tick:', prev, '->', newTime);
-          
-          if (newTime <= 0 && !hasExpiredRef.current) {
-            console.log('Timer expired - calling onExpire');
-            hasExpiredRef.current = true; // Позначаємо, що вже викликали onExpire
-            setIsRunning(false);
-            onExpireRef.current?.();
-            return 0;
-          }
-          
-          return newTime;
-        });
-      }, 1000);
-    } else {
-      console.log('Clearing interval - isRunning:', isRunning, 'timeLeft:', timeLeft);
+    if (isRunning) {
+      console.log('⏸️ Таймер зупинено');
+      setIsRunning(false);
       clearTimerInterval();
     }
+  }, [isRunning, clearTimerInterval]);
 
-    return clearTimerInterval;
-  }, [isRunning, timeLeft, clearTimerInterval]);
-
-  // Автозапуск при першому монтуванні
-  useEffect(() => {
-    console.log('AutoStart effect - autoStart:', autoStart);
-    if (autoStart && timeLeft > 0) {
-      start();
+  const reset = useCallback(() => {
+    console.log('🔄 Таймер скинуто до', settings.timerDuration, 'секунд');
+    clearTimerInterval();
+    setIsRunning(false);
+    setTimeLeft(settings.timerDuration);
+    
+    if (autoStart) {
+      // Невелика затримка перед автоматичним запуском
+      setTimeout(() => {
+        setIsRunning(true);
+      }, 100);
     }
-  }, [autoStart]); // Видаляємо timeLeft і start з залежностей
+  }, [settings.timerDuration, autoStart, clearTimerInterval]);
+
+  useEffect(() => {
+    if (isRunning && timeLeft > 0) {
+      console.log('⏰ Таймер активний, час:', timeLeft);
+      
+      intervalRef.current = window.setInterval(() => {
+        setTimeLeft(prev => {
+          if (prev <= 1) {
+            console.log('⏰ Час вийшов!');
+            setIsRunning(false);
+            clearTimerInterval();
+            onExpire?.();
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    }
+
+    return () => {
+      clearTimerInterval();
+    };
+  }, [isRunning, timeLeft, onExpire, clearTimerInterval]);
+
+  // Скидання таймера при зміні налаштувань
+  useEffect(() => {
+    reset();
+  }, [settings.timerDuration, reset]);
 
   return {
     timeLeft,

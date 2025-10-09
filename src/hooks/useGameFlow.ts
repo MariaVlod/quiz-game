@@ -11,10 +11,10 @@ interface UseGameFlowReturn {
   score: number;
   isFinished: boolean;
   isAnswerLocked: boolean;
-  
+
   // Методи
   selectOption: (optionId: string) => void;
-  skipQuestion: () => void; // Новий метод для пропуску питання
+  skipQuestion: () => void;
   next: () => void;
   restart: () => void;
   getProgress: () => { current: number; total: number };
@@ -40,9 +40,15 @@ export const useGameFlow = (
     if (isAnswerLocked || !currentQuestion) return;
 
     const isCorrect = optionId === currentQuestion.correctOptionId;
-    
+
+    console.log('🎯 Відповідь обрана:', {
+      optionId,
+      isCorrect,
+      correctAnswer: currentQuestion.correctOptionId
+    });
+
     setSelectedOptionId(optionId);
-    setIsAnswerLocked(true);
+    setIsAnswerLocked(true); // Блокуємо подальші відповіді
 
     // Додавання до історії відповідей
     const newAnswer: AnswerHistory = {
@@ -53,11 +59,17 @@ export const useGameFlow = (
     };
 
     setAnswersHistory(prev => [...prev, newAnswer]);
+
+    // Таймер має зупинитися тут для КОЖНОЇ відповіді (правильної чи ні)
+    // Це забезпечить послідовність поведінки
+
   }, [currentQuestion, isAnswerLocked]);
 
-  // Новий метод для пропуску питання (коли час вийшов)
+ 
   const skipQuestion = useCallback(() => {
     if (isAnswerLocked || !currentQuestion) return;
+
+    console.log('⏭️ Пропуск питання:', currentQuestion.id);
 
     // Додаємо пропущену відповідь в історію
     const skippedAnswer: AnswerHistory = {
@@ -72,12 +84,16 @@ export const useGameFlow = (
   }, [currentQuestion, isAnswerLocked]);
 
   const next = useCallback(() => {
+    console.log('➡️ Перехід до наступного питання. Поточний індекс:', currentIndex, 'Всього:', totalQuestions);
+    
     if (currentIndex >= totalQuestions - 1) {
+      console.log('🎮 Останнє питання, завершення гри');
       setIsFinished(true);
     } else {
       setCurrentIndex(prev => prev + 1);
       setSelectedOptionId(null);
       setIsAnswerLocked(false);
+      console.log('🔄 Новий індекс питання:', currentIndex + 1);
     }
   }, [currentIndex, totalQuestions]);
 
@@ -94,7 +110,7 @@ export const useGameFlow = (
     total: totalQuestions
   }), [currentIndex, totalQuestions]);
 
-  // Автоматичне завершення гри, коли всі питання відповідені або пропущені
+  // автоматичне завершення гри, коли всі питання відповідені або пропущені
   useEffect(() => {
     if (answersHistory.length === totalQuestions && totalQuestions > 0) {
       setIsFinished(true);
@@ -110,10 +126,10 @@ export const useGameFlow = (
     score,
     isFinished,
     isAnswerLocked,
-    
+
     // Методи
     selectOption,
-    skipQuestion, // Додаємо новий метод
+    skipQuestion,
     next,
     restart,
     getProgress

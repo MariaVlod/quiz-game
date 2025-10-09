@@ -29,3 +29,15 @@ export interface GameConfig {
   scoringStrategy?: 'basic' | 'timed' | 'streak';
   timePerQuestion?: number;
 }
+
+export interface GameSettings {
+  difficulty: 'easy' | 'medium' | 'hard' | 'all';
+  count: number;
+  timerDuration: number;
+}
+
+export interface GameSettingsContextType {
+  settings: GameSettings;
+  updateSettings: (newSettings: GameSettings) => void;
+  resetSettings: () => void;
+}

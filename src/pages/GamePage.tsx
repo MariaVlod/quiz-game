@@ -1,21 +1,23 @@
-import React, { useEffect, useRef } from 'react'
-import Header from '../components/Header'
-import Card from '../components/Card'
-import Button from '../components/Button'
-import Question from '../game/Question'
-import AnswerList from '../game/AnswerList'
-import ProgressInfo from '../game/ProgressInfo'
-import ScoreBoard from '../game/ScoreBoard'
-import { useGameFlow } from '../hooks/useGameFlow'
-import { useTimer } from '../hooks/useTimer'
-import type { Question as QuestionType } from '../types'
+import React, { useEffect, useRef, useState } from 'react';
+import Header from '../components/Header';
+import Card from '../components/Card';
+import Button from '../components/Button';
+import Question from '../game/Question';
+import AnswerList from '../game/AnswerList';
+import ProgressInfo from '../game/ProgressInfo';
+import ScoreBoard from '../game/ScoreBoard';
+import GameOverModal from '../components/GameOverModal';
+import { useGameFlow } from '../hooks/useGameFlow';
+import { useTimer } from '../hooks/useTimer';
+import type { Question as QuestionType } from '../types';
 
 interface GamePageProps {
-  questions: QuestionType[]
-  onEndGame: (score: number, answersHistory: any[]) => void
+  questions: QuestionType[];
+  onEndGame: (score: number, answersHistory: any[]) => void;
+  onNewGame: () => void;
 }
 
-const GamePage: React.FC<GamePageProps> = ({ questions, onEndGame }) => {
+const GamePage: React.FC<GamePageProps> = ({ questions, onEndGame, onNewGame }) => {
   const {
     currentQuestion,
     selectedOptionId,
@@ -24,86 +26,107 @@ const GamePage: React.FC<GamePageProps> = ({ questions, onEndGame }) => {
     isFinished,
     isAnswerLocked,
     selectOption,
-    skipQuestion, // Додаємо новий метод
+    skipQuestion,
     next,
+    restart,
     getProgress
-  } = useGameFlow(questions)
+  } = useGameFlow(questions);
 
-  // Використовуємо useRef для уникнення повторних викликів
+  const [showGameOverModal, setShowGameOverModal] = useState(false);
   const timeoutRef = useRef<number | null>(null);
 
   const handleTimeExpire = React.useCallback(() => {
-    console.log('⏰ Час вийшов! Автоматичний перехід...');
-    
-    // Очищаємо попередній таймаут, якщо він є
+    console.log('⏰ Час вийшов! Автоматичний пропуск питання...');
+
     if (timeoutRef.current !== null) {
       clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
     }
 
     if (!isAnswerLocked && currentQuestion) {
       console.log('Користувач не встиг відповісти на питання:', currentQuestion.id);
-      // Використовуємо новий метод для пропуску питання
       skipQuestion();
+      
+      timeoutRef.current = window.setTimeout(() => {
+        console.log('➡️ Автоматичний перехід до наступного питання...');
+        next();
+        timeoutRef.current = null;
+      }, 1500);
     }
-    
-    // Затримка для того, щоб користувач побачив, що час вийшов
-    timeoutRef.current = window.setTimeout(() => {
-      console.log('Перехід до наступного питання...');
-      next();
-      timeoutRef.current = null;
-    }, 1000);
   }, [isAnswerLocked, currentQuestion, skipQuestion, next]);
 
-  const { timeLeft, reset, pause } = useTimer({
-    initialSeconds: 10,
+  const { timeLeft, reset, pause, isRunning } = useTimer({
     onExpire: handleTimeExpire,
     autoStart: true
-  })
+  });
 
   const handleAnswerSelect = (optionId: string) => {
-    console.log('Вибір відповіді:', optionId);
-    selectOption(optionId)
-    pause(); // Зупиняємо таймер після вибору відповіді
+    console.log('🎯 Обробка відповіді:', optionId);
+    console.log('⏰ Стан таймера перед відповіддю:', { timeLeft, isRunning });
     
-    // Очищаємо таймаут автоматичного переходу, якщо користувач встиг відповісти
+  
+    selectOption(optionId);
+    
+    
+    console.log('⏸️ Спроба зупинити таймер...');
+    pause();
+    
+    
+    setTimeout(() => {
+      console.log('⏰ Стан таймера після pause:', { timeLeft, isRunning });
+    }, 10);
+
+    
     if (timeoutRef.current !== null) {
       clearTimeout(timeoutRef.current);
       timeoutRef.current = null;
     }
-  }
+
+    setTimeout(() => {
+      console.log('🔄 Відповідь оброблена, стан isAnswerLocked:', true);
+    }, 100);
+  };
 
   const handleNext = () => {
-    console.log('Перехід до наступного питання');
-    next()
-  }
+    console.log('➡️ Перехід до наступного питання');
+    next();
+  };
 
-  // Автоматичне завершення гри
+  const handleRestart = () => {
+    console.log('🔄 Перезапуск гри');
+    restart();
+    setShowGameOverModal(false);
+  };
+
+  const handleNewGame = () => {
+    console.log('Нова гра');
+    setShowGameOverModal(false);
+    onNewGame();
+  };
+
   useEffect(() => {
     if (isFinished) {
-      console.log('🎮 Гра завершена! Результат:', score, 'Історія:', answersHistory);
-      onEndGame(score, answersHistory)
+      console.log('Гра завершена!');
+      setShowGameOverModal(true);
+      onEndGame(score, answersHistory);
     }
-  }, [isFinished, score, answersHistory, onEndGame])
+  }, [isFinished, score, answersHistory, onEndGame]);
 
-  // Перезапуск таймера при зміні питання
   useEffect(() => {
     if (currentQuestion) {
       console.log('🔄 Нове питання, перезапуск таймера:', currentQuestion.id);
-      
-      // Очищаємо таймаут при зміні питання
+
       if (timeoutRef.current !== null) {
         clearTimeout(timeoutRef.current);
         timeoutRef.current = null;
       }
-      
-      reset(10);
+      reset();
     }
-  }, [currentQuestion, reset])
+  }, [currentQuestion, reset]);
 
-  // Очистка при розмонтуванні
   useEffect(() => {
     return () => {
-      if (timeoutRef.current !== null) {
+      if (timeoutRef.current != null) {
         clearTimeout(timeoutRef.current);
       }
     };
@@ -117,31 +140,31 @@ const GamePage: React.FC<GamePageProps> = ({ questions, onEndGame }) => {
           <p>Завантаження питання...</p>
         </Card>
       </div>
-    )
+    );
   }
 
-  const progress = getProgress()
+  const progress = getProgress();
 
   return (
     <div className="page game-page">
       <Header />
-      
+
       <div className="game-page__layout">
         <div className="game-page__info">
-          <ProgressInfo 
-            current={progress.current} 
-            total={progress.total} 
+          <ProgressInfo
+            current={progress.current}
+            total={progress.total}
           />
-          <ScoreBoard score={score} />
+          <ScoreBoard score={score}/>
           <div className={`timer ${timeLeft <= 3 ? 'timer--warning' : ''}`}>
-            Час: {timeLeft}с {!isAnswerLocked && timeLeft > 0 && '⏳'}
+            ⏱️ {timeLeft}с {!isRunning && '⏸️'}
           </div>
         </div>
-        
+
         <Card className="game-page__question-card">
           <Question text={currentQuestion.text} />
-          
-          <AnswerList 
+
+          <AnswerList
             answers={currentQuestion.options}
             selectedOptionId={selectedOptionId}
             correctOptionId={isAnswerLocked ? currentQuestion.correctOptionId : undefined}
@@ -150,21 +173,22 @@ const GamePage: React.FC<GamePageProps> = ({ questions, onEndGame }) => {
           />
 
           {/* Дебаг інформація */}
-          <div style={{ 
-            marginTop: '20px', 
-            padding: '10px', 
-            background: '#f5f5f5', 
+          <div style={{
+            marginTop: '20px',
+            padding: '10px',
+            background: '#f5f5f5',
             borderRadius: '5px',
             fontSize: '12px',
             color: '#666'
           }}>
             Дебаг: Питання {currentQuestion.id} ({progress.current}/{progress.total}) | 
-            Відповідей в історії: {answersHistory.length} | 
-            isAnswerLocked = {isAnswerLocked.toString()} | 
-            Час: {timeLeft}с
+            Відповідей: {answersHistory.length} | 
+            Заблоковано: {isAnswerLocked.toString()} | 
+            Час: {timeLeft}с | 
+            Таймер активний: {isRunning.toString()}
           </div>
         </Card>
-        
+
         <div className="game-page__actions">
           {isAnswerLocked && (
             <Button onClick={handleNext}>
@@ -173,8 +197,17 @@ const GamePage: React.FC<GamePageProps> = ({ questions, onEndGame }) => {
           )}
         </div>
       </div>
-    </div>
-  )
-}
 
-export default GamePage
+      <GameOverModal
+        isOpen={showGameOverModal}
+        onClose={() => setShowGameOverModal(false)}
+        score={score}
+        answersHistory={answersHistory}
+        onRestart={handleRestart}
+        onNewGame={handleNewGame}
+      />
+    </div>
+  );
+};
+
+export default GamePage;
