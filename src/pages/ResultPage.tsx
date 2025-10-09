@@ -9,9 +9,15 @@ interface ResultPageProps {
   score: number
   answersHistory: AnswerHistory[]
   onRestart: () => void
+  onNewGame: () => void 
 }
 
-const ResultPage: React.FC<ResultPageProps> = ({ score, answersHistory, onRestart }) => {
+const ResultPage: React.FC<ResultPageProps> = ({ 
+  score, 
+  answersHistory, 
+  onRestart,
+  onNewGame 
+}) => {
   const { total, correct, incorrect, skipped, percent } = useResults(answersHistory)
   
   const getResultMessage = () => {
@@ -91,8 +97,11 @@ const ResultPage: React.FC<ResultPageProps> = ({ score, answersHistory, onRestar
           </div>
           
           <div className="result-page__actions">
-            <Button onClick={onRestart}>
-              Грати знову
+            <Button onClick={onRestart} variant="primary">
+              ↺ Грати знову
+            </Button>
+            <Button onClick={onNewGame} variant="secondary">
+              🏠 Нова гра
             </Button>
           </div>
         </div>
