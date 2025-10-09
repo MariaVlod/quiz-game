@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { useGameSettings } from '../context/GameSettingsContext';
 
 interface UseTimerProps {
-  initialSeconds: number;
+  initialSeconds?: number;
   onExpire?: () => void;
   autoStart?: boolean;
 }
@@ -14,22 +15,26 @@ interface UseTimerReturn {
   reset: (seconds?: number) => void;
 }
 
-export const useTimer = ({
-  initialSeconds,
-  onExpire,
-  autoStart = false
-}: UseTimerProps): UseTimerReturn => {
+export const useTimer = (props: UseTimerProps): UseTimerReturn => {
+  const { settings } = useGameSettings();
+  const {
+    initialSeconds = settings.timerDuration,
+    onExpire,
+    autoStart = false
+  } = props;
+
   const [timeLeft, setTimeLeft] = useState<number>(initialSeconds);
   const [isRunning, setIsRunning] = useState<boolean>(false);
   const intervalRef = useRef<number | null>(null);
   const onExpireRef = useRef(onExpire);
-  const hasExpiredRef = useRef(false); // Новий ref для відстеження стану завершення
+  const hasExpiredRef = useRef(false);
 
-  // Оновлюємо ref при зміні onExpire
+  // 🔄 Оновлюємо callback при зміні onExpire
   useEffect(() => {
     onExpireRef.current = onExpire;
-  });
+  }, [onExpire]);
 
+  // 🧹 Очищення інтервалу
   const clearTimerInterval = useCallback(() => {
     if (intervalRef.current !== null) {
       clearInterval(intervalRef.current);
@@ -37,66 +42,64 @@ export const useTimer = ({
     }
   }, []);
 
+  // ▶️ Запуск таймера
   const start = useCallback(() => {
-    console.log('Starting timer, timeLeft:', timeLeft, 'isRunning:', isRunning);
     if (timeLeft > 0 && !isRunning) {
       setIsRunning(true);
-      hasExpiredRef.current = false; // Скидаємо стан завершення
+      hasExpiredRef.current = false;
     }
   }, [timeLeft, isRunning]);
 
+  // ⏸️ Пауза
   const pause = useCallback(() => {
-    console.log('Pausing timer');
     setIsRunning(false);
     clearTimerInterval();
   }, [clearTimerInterval]);
 
-  const reset = useCallback((seconds?: number) => {
-    console.log('Resetting timer to:', seconds ?? initialSeconds);
-    pause();
-    setTimeLeft(seconds ?? initialSeconds);
-    hasExpiredRef.current = false; // Скидаємо стан завершення при скиданні
-    // Автоматично запускаємо після скидання
-    setIsRunning(true);
-  }, [initialSeconds, pause]);
+  // 🔁 Скидання
+  const reset = useCallback(
+    (seconds?: number) => {
+      pause();
+      setTimeLeft(seconds ?? settings.timerDuration);
+      hasExpiredRef.current = false;
+      setIsRunning(true);
+    },
+    [pause, settings.timerDuration]
+  );
 
-  // Основний ефект для запуску/зупинки таймера
+  // ⏳ Основна логіка таймера
   useEffect(() => {
-    console.log('Timer effect - isRunning:', isRunning, 'timeLeft:', timeLeft);
-    
     if (isRunning && timeLeft > 0) {
-      console.log('Setting up interval');
       intervalRef.current = window.setInterval(() => {
         setTimeLeft(prev => {
           const newTime = prev - 1;
-          console.log('Timer tick:', prev, '->', newTime);
-          
           if (newTime <= 0 && !hasExpiredRef.current) {
-            console.log('Timer expired - calling onExpire');
-            hasExpiredRef.current = true; // Позначаємо, що вже викликали onExpire
+            hasExpiredRef.current = true;
             setIsRunning(false);
             onExpireRef.current?.();
             return 0;
           }
-          
           return newTime;
         });
       }, 1000);
     } else {
-      console.log('Clearing interval - isRunning:', isRunning, 'timeLeft:', timeLeft);
       clearTimerInterval();
     }
 
     return clearTimerInterval;
   }, [isRunning, timeLeft, clearTimerInterval]);
 
-  // Автозапуск при першому монтуванні
+  // 🚀 Автоматичний запуск при монтуванні
   useEffect(() => {
-    console.log('AutoStart effect - autoStart:', autoStart);
     if (autoStart && timeLeft > 0) {
       start();
     }
-  }, [autoStart]); // Видаляємо timeLeft і start з залежностей
+  }, [autoStart, start, timeLeft]);
+
+  // 🧩 Якщо змінюються налаштування гри — оновити таймер
+  useEffect(() => {
+    setTimeLeft(settings.timerDuration);
+  }, [settings.timerDuration]);
 
   return {
     timeLeft,
