@@ -11,6 +11,7 @@ interface GameOverModalProps {
   answersHistory: AnswerHistory[];
   onRestart: () => void;
   onNewGame: () => void;
+  onSaveResults: () => void;
 }
 
 const GameOverModal: React.FC<GameOverModalProps> = ({
@@ -19,7 +20,8 @@ const GameOverModal: React.FC<GameOverModalProps> = ({
   score,
   answersHistory,
   onRestart,
-  onNewGame
+  onNewGame,
+  onSaveResults
 }) => {
   const { total, correct, incorrect, skipped, percent } = useResults(answersHistory);
 
@@ -37,6 +39,11 @@ const GameOverModal: React.FC<GameOverModalProps> = ({
     if (percent >= 50) return "👍";
     if (percent >= 30) return "💪";
     return "🔄";
+  };
+
+  const handleSaveAndView = () => {
+    onSaveResults();
+    onClose();
   };
 
   return (
@@ -77,6 +84,9 @@ const GameOverModal: React.FC<GameOverModalProps> = ({
         <div className="modal-actions">
           <Button onClick={onRestart} variant="primary">
             ↺ Грати знову
+          </Button>
+          <Button onClick={handleSaveAndView} variant="primary">
+            📊 Переглянути результати
           </Button>
           <Button onClick={onNewGame} variant="secondary">
             🏠 Нова гра

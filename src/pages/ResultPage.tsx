@@ -1,24 +1,29 @@
-import React from 'react'
-import Header from '../components/Header'
-import Card from '../components/Card'
-import Button from '../components/Button'
-import { useResults } from '../hooks/useResults'
-import type { AnswerHistory } from '../types'
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import Header from '../components/Header';
+import Card from '../components/Card';
+import Button from '../components/Button';
+import { useResults } from '../hooks/useResults';
+import type { AnswerHistory } from '../types';
 
-interface ResultPageProps {
-  score: number
-  answersHistory: AnswerHistory[]
-  onRestart: () => void
-  onNewGame: () => void 
-}
+const ResultPage: React.FC = () => {
+  const navigate = useNavigate();
+  const [score, setScore] = useState(0);
+  const [answersHistory, setAnswersHistory] = useState<AnswerHistory[]>([]);
 
-const ResultPage: React.FC<ResultPageProps> = ({ 
-  score, 
-  answersHistory, 
-  onRestart,
-  onNewGame 
-}) => {
-  const { total, correct, incorrect, skipped, percent } = useResults(answersHistory)
+  // Завантаження результатів з sessionStorage
+  useEffect(() => {
+    const savedResults = sessionStorage.getItem('quizResults');
+    if (savedResults) {
+      const results = JSON.parse(savedResults);
+      setScore(results.score);
+      setAnswersHistory(results.answersHistory);
+    } else {
+      navigate('/');
+    }
+  }, [navigate]);
+
+  const { total, correct, incorrect, skipped, percent } = useResults(answersHistory);
   
   const getResultMessage = () => {
     if (correct === total) return "Ідеально! Ти кінознавець екстра-класу! 🏆"
@@ -35,6 +40,18 @@ const ResultPage: React.FC<ResultPageProps> = ({
     if (percent >= 40) return "📚"
     return "🎬"
   }
+
+  const handleRestart = () => {
+    navigate('/game');
+  };
+
+  const handleNewGame = () => {
+    navigate('/');
+  };
+
+  const handleUserProfile = () => {
+    navigate('/user/1');
+  };
 
   return (
     <div className="page result-page">
@@ -97,11 +114,14 @@ const ResultPage: React.FC<ResultPageProps> = ({
           </div>
           
           <div className="result-page__actions">
-            <Button onClick={onRestart} variant="primary">
+            <Button onClick={handleRestart} variant="primary">
               ↺ Грати знову
             </Button>
-            <Button onClick={onNewGame} variant="secondary">
+            <Button onClick={handleNewGame} variant="secondary">
               🏠 Нова гра
+            </Button>
+            <Button onClick={handleUserProfile} variant="secondary">
+              👤 Профіль
             </Button>
           </div>
         </div>
@@ -110,4 +130,4 @@ const ResultPage: React.FC<ResultPageProps> = ({
   )
 }
 
-export default ResultPage
+export default ResultPage;
