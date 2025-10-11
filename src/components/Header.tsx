@@ -5,6 +5,11 @@ import Button from './Button';
 const Header: React.FC = () => {
   const location = useLocation();
 
+  const handleUserProfile = () => {
+    const userId = sessionStorage.getItem('currentUserId') || '1';
+    return `/user/${userId}`;
+  };
+
   return (
     <header className="header">
       <div className="header__content">
@@ -17,17 +22,15 @@ const Header: React.FC = () => {
           <Link to="/">
             <Button 
               variant={location.pathname === '/' ? 'primary' : 'secondary'}
-              className="nav-button"
             >
-              🏠 Головна
+              Головна
             </Button>
           </Link>
-          <Link to="/user/1">
+          <Link to={handleUserProfile()}>
             <Button 
               variant={location.pathname.startsWith('/user') ? 'primary' : 'secondary'}
-              className="nav-button"
             >
-              👤 Профіль
+              Профіль
             </Button>
           </Link>
         </nav>

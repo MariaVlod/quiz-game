@@ -17,8 +17,9 @@ const StartPage: React.FC = () => {
 
   const handleStart = () => {
     if (questions.length > 0) {
-      // Зберігаємо питання в sessionStorage для GamePage
+      // Зберігаємо питання та ID користувача в sessionStorage
       sessionStorage.setItem('quizQuestions', JSON.stringify(questions));
+      sessionStorage.setItem('currentUserId', '1'); // Простий ID для прикладу
       navigate('/game');
     }
   };
@@ -33,7 +34,9 @@ const StartPage: React.FC = () => {
   };
 
   const handleUserProfile = () => {
-    navigate('/user/1'); // Можна зробити динамічний ID
+    // Отримуємо ID користувача з sessionStorage або використовуємо дефолтний
+    const userId = sessionStorage.getItem('currentUserId') || '1';
+    navigate(`/user/${userId}`);
   };
 
   return (
@@ -42,7 +45,7 @@ const StartPage: React.FC = () => {
       
       <Card className="start-page__card">
         <div className="start-page__content">
-          <h2>Ласкаво просимо до Кіно-Вікторини! 🎬</h2>
+          <h2>Ласкаво просимо до Кіно-Вікторини!</h2>
 
           <div className="current-settings">
             <h4>Поточні налаштування:</h4>
@@ -63,7 +66,6 @@ const StartPage: React.FC = () => {
             </ul>
           </div>
 
-          {/* Стани завантаження та помилок */}
           {loading && (
             <div className="loading-state">
               <p>Завантаження питань...</p>
@@ -90,18 +92,18 @@ const StartPage: React.FC = () => {
 
           <div className="start-actions">
             <Button onClick={handleShowSettings} variant="secondary">
-              ⚙️ Налаштування
+              Налаштування
             </Button>
             
             <Button 
               onClick={handleStart} 
               disabled={loading || questions.length === 0}
             >
-              {loading ? 'Завантаження...' : '🎮 Почати гру'}
+              {loading ? 'Завантаження...' : 'Почати гру'}
             </Button>
 
             <Button onClick={handleUserProfile} variant="secondary">
-              👤 Профіль
+              Профіль
             </Button>
           </div>
         </div>
@@ -122,7 +124,6 @@ const StartPage: React.FC = () => {
   );
 };
 
-// Допоміжні функції
 function getDifficultyLabel(difficulty: string): string {
   const labels: { [key: string]: string } = {
     easy: 'Легка',

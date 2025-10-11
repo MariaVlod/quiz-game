@@ -6,6 +6,7 @@ interface ButtonProps {
   variant?: 'primary' | 'secondary';
   disabled?: boolean;
   type?: 'button' | 'submit' | 'reset';
+  size?: 'small' | 'medium' | 'large'; 
   className?: string; 
 }
 

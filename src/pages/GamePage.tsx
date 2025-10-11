@@ -16,7 +16,6 @@ const GamePage: React.FC = () => {
   const navigate = useNavigate();
   const [questions, setQuestions] = useState<QuestionType[]>([]);
   
-  // Завантаження питань з sessionStorage
   useEffect(() => {
     const savedQuestions = sessionStorage.getItem('quizQuestions');
     if (savedQuestions) {
@@ -89,7 +88,7 @@ const GamePage: React.FC = () => {
   };
 
   const handleSaveResults = () => {
-    // Зберігаємо результати в sessionStorage для ResultPage
+    // Зберігаємо результати для ResultPage
     sessionStorage.setItem('quizResults', JSON.stringify({
       score,
       answersHistory

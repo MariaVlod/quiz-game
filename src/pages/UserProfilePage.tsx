@@ -13,18 +13,13 @@ const UserProfilePage: React.FC = () => {
       
       <Card className="user-profile__card">
         <div className="user-profile__content">
-          <h2>👤 Профіль користувача</h2>
+          <h2>Профіль користувача #{id}</h2>
           
           <div className="user-info">
-            <div className="user-avatar">
-              <span>👤</span>
-            </div>
-            
             <div className="user-details">
-              <h3>Користувач #{id}</h3>
-              <p>ID: <strong>{id}</strong></p>
-              <p>Статус: <span className="status-active">Активний</span></p>
-              <p>Дата реєстрації: 01.01.2024</p>
+              <p><strong>ID користувача:</strong> {id}</p>
+              <p><strong>Статус:</strong> Активний</p>
+              <p><strong>Дата реєстрації:</strong> 01.01.2024</p>
             </div>
           </div>
 
@@ -49,12 +44,12 @@ const UserProfilePage: React.FC = () => {
           <div className="user-actions">
             <Link to="/">
               <Button variant="primary">
-                🏠 На головну
+                На головну
               </Button>
             </Link>
             <Link to="/game">
               <Button variant="secondary">
-                🎮 Грати
+                Грати
               </Button>
             </Link>
           </div>

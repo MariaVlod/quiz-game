@@ -11,7 +11,6 @@ const ResultPage: React.FC = () => {
   const [score, setScore] = useState(0);
   const [answersHistory, setAnswersHistory] = useState<AnswerHistory[]>([]);
 
-  // Завантаження результатів з sessionStorage
   useEffect(() => {
     const savedResults = sessionStorage.getItem('quizResults');
     if (savedResults) {
@@ -50,7 +49,9 @@ const ResultPage: React.FC = () => {
   };
 
   const handleUserProfile = () => {
-    navigate('/user/1');
+    // Отримуємо ID користувача з sessionStorage
+    const userId = sessionStorage.getItem('currentUserId') || '1';
+    navigate(`/user/${userId}`);
   };
 
   return (
@@ -96,16 +97,6 @@ const ResultPage: React.FC = () => {
               </div>
             </div>
             
-            <div className="results-breakdown">
-              <h4>Детальна статистика:</h4>
-              <ul>
-                <li>✅ Правильних відповідей: <strong>{correct}</strong></li>
-                <li>❌ Неправильних відповідей: <strong>{incorrect}</strong></li>
-                <li>⏰ Пропущених питань: <strong>{skipped}</strong></li>
-                <li>📊 Загальна успішність: <strong>{percent}%</strong></li>
-              </ul>
-            </div>
-            
             <p className="summary">
               {correct > 0 ? `Ти правильно відповів на ${correct} з ${total} запитань` : 'На жаль, ти не дав жодної правильної відповіді'}
               {skipped > 0 && ` (пропущено ${skipped} питань)`}
@@ -115,13 +106,13 @@ const ResultPage: React.FC = () => {
           
           <div className="result-page__actions">
             <Button onClick={handleRestart} variant="primary">
-              ↺ Грати знову
+              Грати знову
             </Button>
             <Button onClick={handleNewGame} variant="secondary">
-              🏠 Нова гра
+              Нова гра
             </Button>
             <Button onClick={handleUserProfile} variant="secondary">
-              👤 Профіль
+              Профіль
             </Button>
           </div>
         </div>
