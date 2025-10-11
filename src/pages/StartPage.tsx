@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import Button from '../components/Button';
 import Card from '../components/Card';
@@ -8,35 +9,31 @@ import { useQuizData } from '../hooks/useQuizData';
 import { useGameSettings } from '../context/GameSettingsContext';
 import type { GameSettings } from '../types';
 
-interface StartPageProps {
-  onStart: (questions: any[]) => void;
-}
-
-const StartPage: React.FC<StartPageProps> = ({ onStart }) => {
+const StartPage: React.FC = () => {
+  const navigate = useNavigate();
   const { settings, updateSettings } = useGameSettings();
   const { questions, loading, error, reload } = useQuizData();
   const [showSettings, setShowSettings] = useState(false);
 
   const handleStart = () => {
     if (questions.length > 0) {
-      console.log('🎮 Початок гри з питаннями:', {
-        кількість: questions.length,
-        складності: questions.map(q => q.difficulty),
-        налаштування: settings
-      });
-      onStart(questions);
+      // Зберігаємо питання в sessionStorage для GamePage
+      sessionStorage.setItem('quizQuestions', JSON.stringify(questions));
+      navigate('/game');
     }
   };
 
   const handleSettingsSubmit = (newSettings: GameSettings) => {
-    console.log('⚙️ Оновлення налаштувань:', newSettings);
     updateSettings(newSettings);
     setShowSettings(false);
-    // reload() викличеться автоматично через useEffect в useQuizData
   };
 
   const handleShowSettings = () => {
     setShowSettings(true);
+  };
+
+  const handleUserProfile = () => {
+    navigate('/user/1'); // Можна зробити динамічний ID
   };
 
   return (
@@ -93,14 +90,18 @@ const StartPage: React.FC<StartPageProps> = ({ onStart }) => {
 
           <div className="start-actions">
             <Button onClick={handleShowSettings} variant="secondary">
-              Налаштування
+              ⚙️ Налаштування
             </Button>
             
             <Button 
               onClick={handleStart} 
               disabled={loading || questions.length === 0}
             >
-              {loading ? 'Завантаження...' : ' Почати гру'}
+              {loading ? 'Завантаження...' : '🎮 Почати гру'}
+            </Button>
+
+            <Button onClick={handleUserProfile} variant="secondary">
+              👤 Профіль
             </Button>
           </div>
         </div>

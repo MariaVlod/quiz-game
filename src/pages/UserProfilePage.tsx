@@ -11,9 +11,9 @@ const UserProfilePage: React.FC = () => {
     <div className="page user-profile-page">
       <Header />
       
-      <Card className="user-profile-card">
-        <div className="user-profile-content">
-          <h2>Профіль користувача</h2>
+      <Card className="user-profile__card">
+        <div className="user-profile__content">
+          <h2>👤 Профіль користувача</h2>
           
           <div className="user-info">
             <div className="user-avatar">
@@ -22,9 +22,9 @@ const UserProfilePage: React.FC = () => {
             
             <div className="user-details">
               <h3>Користувач #{id}</h3>
-              <p>ID: {id}</p>
-              <p>Статус: Активний</p>
-              <p>Дата реєстрації: Сьогодні</p>
+              <p>ID: <strong>{id}</strong></p>
+              <p>Статус: <span className="status-active">Активний</span></p>
+              <p>Дата реєстрації: 01.01.2024</p>
             </div>
           </div>
 
@@ -52,7 +52,6 @@ const UserProfilePage: React.FC = () => {
                 🏠 На головну
               </Button>
             </Link>
-            
             <Link to="/game">
               <Button variant="secondary">
                 🎮 Грати
