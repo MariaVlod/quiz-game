@@ -1,0 +1,56 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.formGroup label {
+  font-weight: 600;
+  color: #555;
+}
+
+.formGroup select,
+.formGroup input[type="number"],
+.formGroup input[type="range"] {
+  padding: 10px 12px;
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+  font-family: inherit;
+}
+
+.formGroup select:focus,
+.formGroup input:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.formGroup input[type="range"] {
+  padding: 10px 0;
+}
+
+.error {
+  color: #f44336;
+  font-size: 0.9rem;
+  margin-top: 5px;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+@media (max-width: 768px) {
+  .actions {
+    flex-direction: column;
+  }
+}
