@@ -1,0 +1,16 @@
+.question {
+  margin-bottom: 30px;
+}
+
+.text {
+  font-size: 1.4rem;
+  color: #28004d;
+  line-height: 1.5;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .text {
+    font-size: 1.2rem;
+  }
+}
