@@ -1,5 +1,5 @@
 import React from 'react';
-import AnswerOption from '../AnswerOption';
+import AnswerOption from '../AnswerOption/AnswerOption';
 import type { QuestionOption } from '../../types';
 import styles from './AnswerList.module.css';
 
