@@ -4,7 +4,7 @@ import Header from '../../components/Header/Header';
 import Card from '../../components/Card/Card';
 import Button from '../../components/Button/Button';
 import Question from '../../game/Question/Question';
-import AnswerList from '../../game/AnswerList';
+import AnswerList from '../../game/AnswerList/AnswerList';
 import ProgressInfo from '../../game/ProgressInfo';
 import ScoreBoard from '../../game/ScoreBoard';
 import GameOverModal from '../../components/GameOverModal';
