@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import Button from './Button';
+import Button from './Button/Button';
 
 const Header: React.FC = () => {
   const location = useLocation();

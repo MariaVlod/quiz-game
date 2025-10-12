@@ -1,4 +1,5 @@
 import React from 'react';
+import styles from './Button.module.css';
 
 interface ButtonProps {
   children: React.ReactNode;
@@ -6,8 +7,8 @@ interface ButtonProps {
   variant?: 'primary' | 'secondary';
   disabled?: boolean;
   type?: 'button' | 'submit' | 'reset';
-  size?: 'small' | 'medium' | 'large'; 
-  className?: string; 
+  className?: string;
+  size?: 'small' | 'medium' | 'large';
 }
 
 const Button: React.FC<ButtonProps> = ({ 
@@ -16,12 +17,20 @@ const Button: React.FC<ButtonProps> = ({
   variant = 'primary',
   disabled = false,
   type = 'button',
-  className = '' 
+  className = '',
+  size = 'medium'
 }) => {
+  const buttonClass = `
+    ${styles.btn} 
+    ${variant === 'primary' ? styles.btnPrimary : styles.btnSecondary}
+    ${size === 'small' ? styles.btnSmall : size === 'large' ? styles.btnLarge : ''}
+    ${className}
+  `.trim();
+
   return (
     <button 
       type={type}
-      className={`btn btn--${variant} ${className}`} 
+      className={buttonClass}
       onClick={onClick}
       disabled={disabled}
     >

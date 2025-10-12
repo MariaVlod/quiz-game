@@ -2,7 +2,7 @@ import React from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import type { GameSettings } from '../types';
-import Button from './Button';
+import Button from './Button/Button';
 import Card from './Card';
 
 interface SettingsFormProps {

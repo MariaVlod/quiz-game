@@ -1,6 +1,6 @@
 import React from 'react';
 import Modal from './Modal';
-import Button from './Button';
+import Button from './Button/Button';
 import { useResults } from '../hooks/useResults';
 import type { AnswerHistory } from '../types';
 

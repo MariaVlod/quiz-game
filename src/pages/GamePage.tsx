@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import Card from '../components/Card';
-import Button from '../components/Button';
+import Button from '../components/Button/Button';
 import Question from '../game/Question';
 import AnswerList from '../game/AnswerList';
 import ProgressInfo from '../game/ProgressInfo';

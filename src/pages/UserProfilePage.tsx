@@ -2,7 +2,7 @@ import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Header from '../components/Header';
 import Card from '../components/Card';
-import Button from '../components/Button';
+import Button from '../components/Button/Button';
 
 const UserProfilePage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
