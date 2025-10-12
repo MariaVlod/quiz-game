@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Header from '../components/Header';
+import Header from '../components/Header/Header';
 import Card from '../components/Card/Card';
 import Button from '../components/Button/Button';
 import { useResults } from '../hooks/useResults';

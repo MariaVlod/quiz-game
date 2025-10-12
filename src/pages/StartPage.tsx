@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Header from '../components/Header';
+import Header from '../components/Header/Header';
 import Button from '../components/Button/Button';
 import Card from '../components/Card/Card';
 import SettingsForm from '../components/SettingsForm';

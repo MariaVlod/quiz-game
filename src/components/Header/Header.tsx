@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import Button from './Button/Button';
+import Button from '../Button/Button';
+import styles from './Header.module.css';
 
 const Header: React.FC = () => {
   const location = useLocation();
@@ -11,14 +12,14 @@ const Header: React.FC = () => {
   };
 
   return (
-    <header className="header">
-      <div className="header__content">
-        <div className="header__title-section">
-          <h1 className="header__title">Кіно-Вікторина</h1>
-          <p className="header__subtitle">Перевір свої знання про фільми!</p>
+    <header className={styles.header}>
+      <div className={styles.headerContent}>
+        <div className={styles.titleSection}>
+          <h1 className={styles.title}>Кіно-Вікторина</h1>
+          <p className={styles.subtitle}>Перевір свої знання про фільми!</p>
         </div>
         
-        <nav className="header__navigation">
+        <nav className={styles.navigation}>
           <Link to="/">
             <Button 
               variant={location.pathname === '/' ? 'primary' : 'secondary'}
