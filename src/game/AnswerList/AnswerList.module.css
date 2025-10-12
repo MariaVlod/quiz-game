@@ -1,0 +1,13 @@
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+/* Адаптивність */
+@media (max-width: 768px) {
+  .list {
+    gap: 12px;
+  }
+}

@@ -1,0 +1,75 @@
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: 20px; 
+  padding: 15px 20px;
+  border: 2px solid #e9ecef;
+  border-radius: 12px;
+  cursor: pointer;
+  background: white;
+  
+  
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.option:hover:not(.disabled) {
+  border-color: #667eea;
+  transform: translateY(-3px); 
+  box-shadow: 0 8px 15px rgba(102, 126, 234, 0.2);
+}
+
+.disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+  background-color: #f7f7f7;
+}
+
+.selected {
+  border-color: #667eea !important;
+  background: #f0f4ff !important;
+}
+
+.correct {
+  border-color: #4caf50 !important;
+  background: #e8f5e8 !important;
+}
+
+.incorrect {
+  border-color: #f44336 !important;
+  background: #ffebee !important;
+}
+
+.letter {
+  background: #667eea;
+  color: white;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.optionText {
+  font-size: 1.1rem;
+  color: #333;
+  flex-grow: 1; 
+}
+
+.status {
+  margin-left: auto;
+  font-size: 1.2rem;
+}
+
+
+.correct .status {
+  color: #4caf50;
+}
+
+.incorrect .status {
+  color: #f44336;
+}

@@ -1,8 +1,9 @@
 import React from 'react';
-import Modal from './Modal';
-import Button from './Button';
-import { useResults } from '../hooks/useResults';
-import type { AnswerHistory } from '../types';
+import Modal from '../Modal/Modal';
+import Button from '../Button/Button';
+import { useResults } from '../../hooks/useResults';
+import type { AnswerHistory } from '../../types';
+import styles from './GameOverModal.module.css';
 
 interface GameOverModalProps {
   isOpen: boolean;
@@ -11,6 +12,7 @@ interface GameOverModalProps {
   answersHistory: AnswerHistory[];
   onRestart: () => void;
   onNewGame: () => void;
+  onSaveResults: () => void;
 }
 
 const GameOverModal: React.FC<GameOverModalProps> = ({
@@ -19,7 +21,8 @@ const GameOverModal: React.FC<GameOverModalProps> = ({
   score,
   answersHistory,
   onRestart,
-  onNewGame
+  onNewGame,
+  onSaveResults
 }) => {
   const { total, correct, incorrect, skipped, percent } = useResults(answersHistory);
 
@@ -31,55 +34,45 @@ const GameOverModal: React.FC<GameOverModalProps> = ({
     return "Спробуй ще раз! Ти покращиш результат! 🔄";
   };
 
-  const getResultEmoji = () => {
-    if (percent >= 90) return "🏆";
-    if (percent >= 70) return "⭐";
-    if (percent >= 50) return "👍";
-    if (percent >= 30) return "💪";
-    return "🔄";
+  const handleSaveAndView = () => {
+    onSaveResults();
+    onClose();
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title={`Гра завершена! ${getResultEmoji()}`}>
-      <div className="game-over-modal">
-        <div className="result-summary">
-          <div className="final-score">
-            <span className="score-value">{score}</span>
-            <span className="score-label">балів</span>
+    <Modal isOpen={isOpen} onClose={onClose} title="Гра завершена!">
+      <div className={styles.modal}>
+        <div className={styles.summary}>
+          <div className={styles.finalScore}>
+            <span className={styles.scoreValue}>{score}</span>
+            <span className={styles.scoreLabel}>балів</span>
           </div>
           
-          <div className="result-message">
+          <div className={styles.message}>
             <p>{getResultMessage()}</p>
           </div>
 
-          <div className="detailed-stats">
-            <div className="stat-row">
+          <div className={styles.stats}>
+            <div className={styles.statRow}>
               <span>Правильних відповідей:</span>
               <strong>{correct} / {total}</strong>
             </div>
-            <div className="stat-row">
+            <div className={styles.statRow}>
               <span>Успішність:</span>
               <strong>{percent}%</strong>
             </div>
-            <div className="stat-row">
-              <span>Неправильних:</span>
-              <strong>{incorrect}</strong>
-            </div>
-            {skipped > 0 && (
-              <div className="stat-row">
-                <span>Пропущених:</span>
-                <strong>{skipped}</strong>
-              </div>
-            )}
           </div>
         </div>
 
-        <div className="modal-actions">
+        <div className={styles.actions}>
           <Button onClick={onRestart} variant="primary">
-            ↺ Грати знову
+            Грати знову
+          </Button>
+          <Button onClick={handleSaveAndView} variant="primary">
+            Переглянути результати
           </Button>
           <Button onClick={onNewGame} variant="secondary">
-            🏠 Нова гра
+            Нова гра
           </Button>
         </div>
       </div>

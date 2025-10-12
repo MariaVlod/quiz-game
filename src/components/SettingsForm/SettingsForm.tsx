@@ -1,9 +1,10 @@
 import React from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import type { GameSettings } from '../types';
-import Button from './Button';
-import Card from './Card';
+import type { GameSettings } from '../../types';
+import Button from '../Button/Button';
+import Card from '../Card/Card';
+import styles from './SettingsForm.module.css';
 
 interface SettingsFormProps {
   initialSettings: GameSettings;
@@ -29,7 +30,7 @@ const SettingsForm: React.FC<SettingsFormProps> = ({
   onCancel 
 }) => {
   return (
-    <Card className="settings-form">
+    <Card>
       <h3>Налаштування гри</h3>
       
       <Formik
@@ -38,8 +39,8 @@ const SettingsForm: React.FC<SettingsFormProps> = ({
         onSubmit={onSubmit}
       >
         {({ isSubmitting, values }) => (
-          <Form className="form">
-            <div className="form-group">
+          <Form className={styles.form}>
+            <div className={styles.formGroup}>
               <label htmlFor="difficulty">Складність:</label>
               <Field as="select" id="difficulty" name="difficulty">
                 <option value="all">Всі</option>
@@ -47,10 +48,10 @@ const SettingsForm: React.FC<SettingsFormProps> = ({
                 <option value="medium">Середня</option>
                 <option value="hard">Складна</option>
               </Field>
-              <ErrorMessage name="difficulty" component="div" className="error-message" />
+              <ErrorMessage name="difficulty" component="div" className={styles.error} />
             </div>
 
-            <div className="form-group">
+            <div className={styles.formGroup}>
               <label htmlFor="count">Кількість питань:</label>
               <Field 
                 type="number" 
@@ -59,10 +60,10 @@ const SettingsForm: React.FC<SettingsFormProps> = ({
                 min="1" 
                 max="20" 
               />
-              <ErrorMessage name="count" component="div" className="error-message" />
+              <ErrorMessage name="count" component="div" className={styles.error} />
             </div>
 
-            <div className="form-group">
+            <div className={styles.formGroup}>
               <label htmlFor="timerDuration">
                 Час на відповідь (секунди): {values.timerDuration}s
               </label>
@@ -74,10 +75,10 @@ const SettingsForm: React.FC<SettingsFormProps> = ({
                 max="60" 
                 step="5"
               />
-              <ErrorMessage name="timerDuration" component="div" className="error-message" />
+              <ErrorMessage name="timerDuration" component="div" className={styles.error} />
             </div>
 
-            <div className="form-actions">
+            <div className={styles.actions}>
               {onCancel && (
                 <Button type="button" variant="secondary" onClick={onCancel}>
                   Скасувати

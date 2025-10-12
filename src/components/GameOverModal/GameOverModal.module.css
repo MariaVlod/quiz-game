@@ -1,0 +1,74 @@
+.modal {
+  text-align: center;
+}
+
+.summary {
+  margin-bottom: 30px;
+}
+
+.finalScore {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  padding: 30px;
+  border-radius: 15px;
+  margin: 20px 0;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.scoreValue {
+  display: block;
+  font-size: 3rem;
+  font-weight: bold;
+  line-height: 1;
+}
+
+.scoreLabel {
+  font-size: 1.1rem;
+  opacity: 0.9;
+}
+
+.message {
+  margin: 20px 0;
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.stats {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 10px;
+  margin: 20px 0;
+}
+
+.statRow {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.statRow:last-child {
+  border-bottom: none;
+}
+
+.actions {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+  .actions {
+    flex-direction: column;
+  }
+  
+  .finalScore {
+    padding: 20px;
+  }
+  
+  .scoreValue {
+    font-size: 2.5rem;
+  }
+}
