@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom';
-import Button from './Button/Button';
-import Card from './Card/Card';
+import Button from '../Button/Button';
+import Card from '../Card/Card';
+import styles from './Modal.module.css';
 
 interface ModalProps {
   isOpen: boolean;
@@ -49,23 +50,23 @@ const Modal: React.FC<ModalProps> = ({
   };
 
   return ReactDOM.createPortal(
-    <div className="modal-overlay" onClick={handleOverlayClick}>
-      <Card className="modal-content" onClick={handleCardClick}>
+    <div className={styles.overlay} onClick={handleOverlayClick}>
+      <Card className={styles.content} onClick={handleCardClick}>
         {(title || showCloseButton) && (
-          <div className="modal-header">
+          <div className={styles.header}>
             {title && <h3>{title}</h3>}
             {showCloseButton && (
               <Button 
                 variant="secondary" 
                 onClick={onClose} 
-                className="modal-close"
+                className={styles.close}
               >
                 ×
               </Button>
             )}
           </div>
         )}
-        <div className="modal-body">
+        <div className={styles.body}>
           {children}
         </div>
       </Card>
