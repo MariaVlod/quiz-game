@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import Button from './Button/Button';
-import Card from './Card';
+import Card from './Card/Card';
 
 interface ModalProps {
   isOpen: boolean;

@@ -3,7 +3,7 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import type { GameSettings } from '../types';
 import Button from './Button/Button';
-import Card from './Card';
+import Card from './Card/Card';
 
 interface SettingsFormProps {
   initialSettings: GameSettings;
