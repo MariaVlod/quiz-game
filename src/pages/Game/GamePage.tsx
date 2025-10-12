@@ -1,16 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Header from '../components/Header/Header';
-import Card from '../components/Card/Card';
-import Button from '../components/Button/Button';
-import Question from '../game/Question';
-import AnswerList from '../game/AnswerList';
-import ProgressInfo from '../game/ProgressInfo';
-import ScoreBoard from '../game/ScoreBoard';
-import GameOverModal from '../components/GameOverModal';
-import { useGameFlow } from '../hooks/useGameFlow';
-import { useTimer } from '../hooks/useTimer';
-import type { Question as QuestionType } from '../types';
+import Header from '../../components/Header/Header';
+import Card from '../../components/Card/Card';
+import Button from '../../components/Button/Button';
+import Question from '../../game/Question';
+import AnswerList from '../../game/AnswerList';
+import ProgressInfo from '../../game/ProgressInfo';
+import ScoreBoard from '../../game/ScoreBoard';
+import GameOverModal from '../../components/GameOverModal';
+import { useGameFlow } from '../../hooks/useGameFlow';
+import { useTimer } from '../../hooks/useTimer';
+import type { Question as QuestionType } from '../../types';
+import styles from './GamePage.module.css';
 
 const GamePage: React.FC = () => {
   const navigate = useNavigate();
@@ -88,7 +89,6 @@ const GamePage: React.FC = () => {
   };
 
   const handleSaveResults = () => {
-    // Зберігаємо результати для ResultPage
     sessionStorage.setItem('quizResults', JSON.stringify({
       score,
       answersHistory
@@ -122,7 +122,7 @@ const GamePage: React.FC = () => {
 
   if (!currentQuestion || questions.length === 0) {
     return (
-      <div className="page game-page">
+      <div className="page">
         <Header />
         <Card>
           <p>Завантаження питання...</p>
@@ -132,24 +132,25 @@ const GamePage: React.FC = () => {
   }
 
   const progress = getProgress();
+  const timerClass = `${styles.timer} ${timeLeft <= 3 ? styles.timerWarning : ''}`;
 
   return (
-    <div className="page game-page">
+    <div className="page">
       <Header />
 
-      <div className="game-page__layout">
-        <div className="game-page__info">
+      <div className={styles.layout}>
+        <div className={styles.info}>
           <ProgressInfo
             current={progress.current}
             total={progress.total}
           />
           <ScoreBoard score={score}/>
-          <div className={`timer ${timeLeft <= 3 ? 'timer--warning' : ''}`}>
+          <div className={timerClass}>
             ⏱️ {timeLeft}с {!isRunning && '⏸️'}
           </div>
         </div>
 
-        <Card className="game-page__question-card">
+        <Card className={styles.questionCard}>
           <Question text={currentQuestion.text} />
 
           <AnswerList
@@ -159,9 +160,17 @@ const GamePage: React.FC = () => {
             onAnswerSelect={handleAnswerSelect}
             disabled={isAnswerLocked}
           />
+
+          <div className={styles.debug}>
+            Дебаг: Питання {currentQuestion.id} ({progress.current}/{progress.total}) | 
+            Відповідей: {answersHistory.length} | 
+            Заблоковано: {isAnswerLocked.toString()} | 
+            Час: {timeLeft}с | 
+            Таймер активний: {isRunning.toString()}
+          </div>
         </Card>
 
-        <div className="game-page__actions">
+        <div className={styles.actions}>
           {isAnswerLocked && (
             <Button onClick={handleNext}>
               {progress.current === progress.total ? 'Завершити гру' : 'Наступне питання →'}
