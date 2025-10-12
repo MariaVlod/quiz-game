@@ -5,7 +5,7 @@ import Card from '../../components/Card/Card';
 import Button from '../../components/Button/Button';
 import Question from '../../game/Question/Question';
 import AnswerList from '../../game/AnswerList/AnswerList';
-import ProgressInfo from '../../game/ProgressInfo';
+import ProgressInfo from '../../game/ProgressInfo/ProgressInfo';
 import ScoreBoard from '../../game/ScoreBoard';
 import GameOverModal from '../../components/GameOverModal';
 import { useGameFlow } from '../../hooks/useGameFlow';

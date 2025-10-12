@@ -1,0 +1,29 @@
+.progress {
+  flex: 1;
+}
+
+.text {
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: white;
+}
+
+.bar {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  height: 8px;
+  overflow: hidden;
+}
+
+.fill {
+  background: linear-gradient(90deg, #ff6b6b, #ee5a24);
+  height: 100%;
+  border-radius: 10px;
+  transition: width 0.3s ease;
+}
+
+@media (max-width: 768px) {
+  .progress {
+    width: 100%;
+  }
+}
