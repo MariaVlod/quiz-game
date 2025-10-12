@@ -1,6 +1,6 @@
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import StartPage from '../pages/StartPage';
+import StartPage from '../pages/Start/StartPage';
 import GamePage from '../pages/GamePage';
 import ResultPage from '../pages/ResultPage';
 import UserProfilePage from '../pages/UserProfilePage';

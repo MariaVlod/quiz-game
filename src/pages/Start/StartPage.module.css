@@ -1,0 +1,113 @@
+.content {
+  text-align: center;
+}
+
+.content h2 {
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.currentSettings {
+  background: #f8f9fa;
+  padding: 15px;
+  border-radius: 10px;
+  margin: 20px 0;
+  border-left: 4px solid #667eea;
+}
+
+.currentSettings h4 {
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.settingsPreview {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.settingsPreview span {
+  background: white;
+  padding: 8px 15px;
+  border-radius: 20px;
+  border: 1px solid #e9ecef;
+  font-size: 0.9rem;
+}
+
+.rules {
+  margin: 30px 0;
+  text-align: left;
+}
+
+.rules h3 {
+  margin-bottom: 15px;
+  color: #555;
+  text-align: center;
+}
+
+.rules ul {
+  list-style: none;
+  margin-bottom: 30px;
+}
+
+.rules li {
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  align-items: center;
+}
+
+.rules li::before {
+  content: "📌";
+  margin-right: 10px;
+}
+
+.loadingState,
+.errorState,
+.emptyState {
+  text-align: center;
+  padding: 20px;
+  margin: 20px 0;
+  border-radius: 12px;
+}
+
+.loadingState {
+  background: #e3f2fd;
+  color: #1976d2;
+}
+
+.errorState {
+  background: #ffebee;
+  color: #d32f2f;
+}
+
+.emptyState {
+  background: #fff3e0;
+  color: #f57c00;
+}
+
+.actions {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin-top: 30px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+  .settingsPreview {
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+  }
+  
+  .actions {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .rules li {
+    font-size: 0.9rem;
+  }
+}
