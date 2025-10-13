@@ -17,7 +17,7 @@ import styles from './GamePage.module.css';
 const GamePage: React.FC = () => {
   const navigate = useNavigate();
   const [questions, setQuestions] = useState<QuestionType[]>([]);
-  const { addResult, currentUserId } = useGameStore();
+  const { addResult, currentUserId, settings } = useGameStore(); // ← ДОДАВ settings
 
   useEffect(() => {
     const savedQuestions = sessionStorage.getItem('quizQuestions');
@@ -78,13 +78,13 @@ const GamePage: React.FC = () => {
         correct,
         total,
         percent,
-        difficulty: 'all', // Можна додати логіку для визначення складності
+        difficulty: settings.difficulty, // ← ВИПРАВЛЕНО: беремо реальну складність
         userId: currentUserId
       });
 
       setShowGameOverModal(true);
     }
-  }, [isFinished, answersHistory, score, addResult, currentUserId]);
+  }, [isFinished, answersHistory, score, addResult, currentUserId, settings.difficulty]); // ← ДОДАВ залежність
 
   const handleAnswerSelect = (optionId: string) => {
     selectOption(optionId);
@@ -180,7 +180,8 @@ const GamePage: React.FC = () => {
             Відповідей: {answersHistory.length} |
             Заблоковано: {isAnswerLocked.toString()} |
             Час: {timeLeft}c |
-            Таймер активний: {isRunning.toString()}
+            Таймер активний: {isRunning.toString()} |
+            Складність: {settings.difficulty} ← ДОДАВ ДЕБАГ-ІНФО
           </div>
         </Card>
 

@@ -1,11 +1,28 @@
 import { useState, useEffect, useCallback } from 'react';
 import type { Question, QuizFilterOptions } from '../types';
 import { mockQuestions } from '../data/mockQuestions';
-import { shuffleArray, shuffleQuestions } from '../utils/shuffle';
-import { useGameStore } from '../store/gameStore'; //Zustand
+import { useGameStore } from '../store/gameStore';
+
+// ✅ Функція для перемішування масиву
+export const shuffleArray = <T>(array: T[]): T[] => {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+};
+
+
+export const shuffleQuestions = (questions: Question[]): Question[] => {
+  return questions.map(question => ({
+    ...question,
+    options: shuffleArray(question.options) 
+  }));
+};
 
 export const useQuizData = () => {
-  const { settings } = useGameStore(); //Zustand
+  const { settings } = useGameStore();
   const [questions, setQuestions] = useState<Question[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error | null>(null);
@@ -20,7 +37,7 @@ export const useQuizData = () => {
 
       let availableQuestions = [...mockQuestions];
 
-      // Фільтрація за складністю з налаштувань
+      // Фільтрація за складністю
       if (settings.difficulty && settings.difficulty !== 'all') {
         availableQuestions = availableQuestions.filter(
           q => q.difficulty === settings.difficulty
@@ -35,26 +52,27 @@ export const useQuizData = () => {
       let selectedQuestions: Question[];  
       const count = settings.count || 5;  
 
-      if (availableQuestions.length <= count) {  
-        selectedQuestions = [...availableQuestions];  
+    
+      const shuffledAvailable = shuffleArray(availableQuestions);
+      
+      if (shuffledAvailable.length <= count) {  
+        selectedQuestions = [...shuffledAvailable];  
       } else {  
-        const shuffled = shuffleArray(availableQuestions);  
-        selectedQuestions = shuffled.slice(0, count);  
+        selectedQuestions = shuffledAvailable.slice(0, count);  
       }
-
       const finalQuestions = shuffleQuestions(selectedQuestions);
+      const fullyShuffledQuestions = shuffleArray(finalQuestions);
 
-      // Логування для дебагу  
       console.log('✅ Завантажені питання:', {  
         обранаСкладність: settings.difficulty,  
         кількістьПитань: settings.count,  
         доступноПитань: availableQuestions.length,  
-        обраноПитань: finalQuestions.length,  
-        складності: finalQuestions.map(q => q.difficulty),  
-        питанняIDs: finalQuestions.map(q => q.id)  
+        обраноПитань: fullyShuffledQuestions.length,  
+        складності: fullyShuffledQuestions.map(q => q.difficulty),  
+        питанняIDs: fullyShuffledQuestions.map(q => q.id)  
       });  
 
-      setQuestions(finalQuestions);  
+      setQuestions(fullyShuffledQuestions);  
     } catch (err) {  
       const error = err instanceof Error ? err : new Error('Помилка завантаження питань');  
       setError(error);  
