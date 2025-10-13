@@ -6,27 +6,21 @@ import Card from '../../components/Card/Card';
 import SettingsForm from '../../components/SettingsForm/SettingsForm';
 import Modal from '../../components/Modal/Modal';
 import { useQuizData } from '../../hooks/useQuizData';
-import { useGameSettings } from '../../context/GameSettingsContext';
+import { useGameStore } from '../../store/gameStore';
 import type { GameSettings } from '../../types';
 import styles from './StartPage.module.css';
 
 const StartPage: React.FC = () => {
   const navigate = useNavigate();
-  const { settings, updateSettings } = useGameSettings();
+  const { settings } = useGameStore();
   const { questions, loading, error, reload } = useQuizData();
   const [showSettings, setShowSettings] = useState(false);
 
   const handleStart = () => {
     if (questions.length > 0) {
       sessionStorage.setItem('quizQuestions', JSON.stringify(questions));
-      sessionStorage.setItem('currentUserId', '1');
       navigate('/game');
     }
-  };
-
-  const handleSettingsSubmit = (newSettings: GameSettings) => {
-    updateSettings(newSettings);
-    setShowSettings(false);
   };
 
   const handleShowSettings = () => {
@@ -34,17 +28,17 @@ const StartPage: React.FC = () => {
   };
 
   const handleUserProfile = () => {
-    const userId = sessionStorage.getItem('currentUserId') || '1';
+    const userId = useGameStore.getState().currentUserId;
     navigate(`/user/${userId}`);
   };
 
   return (
     <div className="page">
       <Header />
-      
+
       <Card size="large" className={styles.card}>
         <div className={styles.content}>
-          <h2>Ласкаво просимо до Кіно-Вікторини! 🎬</h2>
+          <h2>Ласкаво просимо до Кіно-Вікторини!</h2>
 
           <div className={styles.currentSettings}>
             <h4>Поточні налаштування:</h4>
@@ -93,9 +87,9 @@ const StartPage: React.FC = () => {
             <Button onClick={handleShowSettings} variant="secondary">
               Налаштування
             </Button>
-            
-            <Button 
-              onClick={handleStart} 
+
+            <Button
+              onClick={handleStart}
               disabled={loading || questions.length === 0}
             >
               {loading ? 'Завантаження...' : 'Почати гру'}
@@ -108,16 +102,12 @@ const StartPage: React.FC = () => {
         </div>
       </Card>
 
-      <Modal 
-        isOpen={showSettings} 
+      <Modal
+        isOpen={showSettings}
         onClose={() => setShowSettings(false)}
         title="Налаштування гри"
       >
-        <SettingsForm
-          initialSettings={settings}
-          onSubmit={handleSettingsSubmit}
-          onCancel={() => setShowSettings(false)}
-        />
+        <SettingsForm onCancel={() => setShowSettings(false)} />
       </Modal>
     </div>
   );
