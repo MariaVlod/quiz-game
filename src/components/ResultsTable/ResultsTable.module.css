@@ -1,0 +1,100 @@
+/* Контейнер тепер створює ефект "картки" з тінню та заокругленими кутами */
+.tableContainer {
+  margin-top: 2rem;
+  background: white;
+  border-radius: 15px; /* Заокруглення, як у ваших карток */
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1); /* Тінь для глибини */
+  overflow-x: auto; /* Залишаємо горизонтальний скрол */
+  padding: 10px; /* Невеликий внутрішній відступ */
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse; /* Важливо для кастомних рамок */
+  font-size: 0.9rem;
+  border-spacing: 0; /* Прибираємо стандартні відступи */
+}
+
+/* Прибираємо стандартні рамки, щоб зробити свої */
+.table th,
+.table td {
+  padding: 1rem 1.2rem;
+  text-align: left;
+  border-bottom: 1px solid #e9ecef; /* Тонка лінія між рядками */
+}
+
+/* Більш виразний заголовок */
+.table th {
+  background-color: transparent; /* Прибираємо сірий фон */
+  font-weight: 600;
+  color: #764ba2; /* Використовуємо колір з вашого градієнта */
+  text-transform: uppercase; /* Великі літери для стилю */
+  letter-spacing: 0.5px; /* Невеликий простір між літерами */
+  border-bottom: 2px solid #667eea; /* Яскрава нижня рамка */
+}
+
+/* Інтерактивність рядків: плавна зміна кольору та легке "підняття" */
+.table tr {
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.table tr:hover {
+  background-color: #f5f6ff; /* Світло-фіолетовий фон при наведенні */
+  transform: scale(1.015); /* Трохи збільшуємо рядок */
+  cursor: pointer;
+}
+
+/* Щоб перший і останній стовпчик мали заокруглення */
+.table th:first-child, .table td:first-child {
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+}
+.table th:last-child, .table td:last-child {
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+
+/* Комірки з балами */
+.scoreCell {
+  font-weight: bold;
+  font-size: 1rem;
+  color: #667eea; /* Основний фіолетовий колір */
+}
+
+.correctCell {
+  color: #28a745;
+}
+
+/* Перетворюємо відсотки на стильні "теги" */
+.percentCell span {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 20px; /* Робимо їх овальними */
+  font-weight: bold;
+  color: white;
+}
+
+.percentCell .high {
+  background: linear-gradient(135deg, #28a745, #20c997); /* Зелений градієнт */
+}
+
+.percentCell .medium {
+  background: linear-gradient(135deg, #ffc107, #ff9800); /* Жовтий градієнт */
+}
+
+.percentCell .low {
+  background: linear-gradient(135deg, #dc3545, #ff6b6b); /* Червоний градієнт, як у кнопок */
+}
+
+/* Адаптивність */
+@media (max-width: 768px) {
+  .table {
+    font-size: 0.85rem;
+  }
+  
+  .table th,
+  .table td {
+    padding: 0.75rem;
+  }
+}

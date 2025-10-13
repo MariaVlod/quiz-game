@@ -4,11 +4,10 @@ import * as Yup from 'yup';
 import type { GameSettings } from '../../types';
 import Button from '../Button/Button';
 import Card from '../Card/Card';
+import { useGameStore } from '../../store/gameStore';
 import styles from './SettingsForm.module.css';
 
 interface SettingsFormProps {
-  initialSettings: GameSettings;
-  onSubmit: (settings: GameSettings) => void;
   onCancel?: () => void;
 }
 
@@ -24,19 +23,24 @@ const validationSchema = Yup.object({
     .required('Вкажіть час на відповідь')
 });
 
-const SettingsForm: React.FC<SettingsFormProps> = ({ 
-  initialSettings, 
-  onSubmit, 
-  onCancel 
+const SettingsForm: React.FC<SettingsFormProps> = ({
+  onCancel
 }) => {
+  const { settings, updateSettings } = useGameStore();
+
+  const handleSubmit = (values: GameSettings) => {
+    updateSettings(values);
+    onCancel?.();
+  };
+
   return (
     <Card>
       <h3>Налаштування гри</h3>
-      
+
       <Formik
-        initialValues={initialSettings}
+        initialValues={settings}
         validationSchema={validationSchema}
-        onSubmit={onSubmit}
+        onSubmit={handleSubmit}
       >
         {({ isSubmitting, values }) => (
           <Form className={styles.form}>
@@ -53,26 +57,26 @@ const SettingsForm: React.FC<SettingsFormProps> = ({
 
             <div className={styles.formGroup}>
               <label htmlFor="count">Кількість питань:</label>
-              <Field 
-                type="number" 
-                id="count" 
-                name="count" 
-                min="1" 
-                max="20" 
+              <Field
+                type="number"
+                id="count"
+                name="count"
+                min="1"
+                max="20"
               />
               <ErrorMessage name="count" component="div" className={styles.error} />
             </div>
 
             <div className={styles.formGroup}>
               <label htmlFor="timerDuration">
-                Час на відповідь (секунди): {values.timerDuration}s
+                Час на відповідь (секунди): {values.timerDuration}с
               </label>
-              <Field 
-                type="range" 
-                id="timerDuration" 
-                name="timerDuration" 
-                min="5" 
-                max="60" 
+              <Field
+                type="range"
+                id="timerDuration"
+                name="timerDuration"
+                min="5"
+                max="60"
                 step="5"
               />
               <ErrorMessage name="timerDuration" component="div" className={styles.error} />

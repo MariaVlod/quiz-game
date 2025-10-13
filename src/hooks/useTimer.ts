@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { useGameSettings } from '../context/GameSettingsContext';
+import { useGameStore } from '../store/gameStore';
 
 interface UseTimerProps {
   onExpire?: () => void;
@@ -14,11 +14,10 @@ interface UseTimerReturn {
   reset: () => void;
 }
 
-export const useTimer = ({
-  onExpire,
-  autoStart = false
-}: UseTimerProps): UseTimerReturn => {
-  const { settings } = useGameSettings();
+export const useTimer = (
+  { onExpire, autoStart = false }: UseTimerProps
+): UseTimerReturn => {
+  const { settings } = useGameStore();
   const [timeLeft, setTimeLeft] = useState<number>(settings.timerDuration);
   const [isRunning, setIsRunning] = useState<boolean>(autoStart);
   const intervalRef = useRef<number | null>(null);
@@ -41,7 +40,7 @@ export const useTimer = ({
     if (isRunning) {
       console.log('⏸️ Таймер зупинено');
       setIsRunning(false);
-      clearTimerInterval();
+      clearTimerInterval(); // ← ВІДНОВЛЮЮ ЦЕ!
     }
   }, [isRunning, clearTimerInterval]);
 
@@ -62,7 +61,7 @@ export const useTimer = ({
   useEffect(() => {
     if (isRunning && timeLeft > 0) {
       console.log('⏰ Таймер активний, час:', timeLeft);
-      
+
       intervalRef.current = window.setInterval(() => {
         setTimeLeft(prev => {
           if (prev <= 1) {
