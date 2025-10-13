@@ -7,7 +7,6 @@ import styles from './UserProfilePage.module.css';
 
 const UserProfilePage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-
   return (
     <div className="page">
       <Header />

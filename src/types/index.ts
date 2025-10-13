@@ -36,8 +36,3 @@ export interface GameSettings {
   timerDuration: number;
 }
 
-export interface GameSettingsContextType {
-  settings: GameSettings;
-  updateSettings: (newSettings: GameSettings) => void;
-  resetSettings: () => void;
-}
