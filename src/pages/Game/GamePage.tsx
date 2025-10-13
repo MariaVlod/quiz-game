@@ -10,13 +10,15 @@ import ScoreBoard from '../../game/ScoreBoard/ScoreBoard';
 import GameOverModal from '../../components/GameOverModal/GameOverModal';
 import { useGameFlow } from '../../hooks/useGameFlow';
 import { useTimer } from '../../hooks/useTimer';
+import { useGameStore } from '../../store/gameStore';
 import type { Question as QuestionType } from '../../types';
 import styles from './GamePage.module.css';
 
 const GamePage: React.FC = () => {
   const navigate = useNavigate();
   const [questions, setQuestions] = useState<QuestionType[]>([]);
-  
+  const { addResult, currentUserId } = useGameStore();
+
   useEffect(() => {
     const savedQuestions = sessionStorage.getItem('quizQuestions');
     if (savedQuestions) {
@@ -51,7 +53,7 @@ const GamePage: React.FC = () => {
 
     if (!isAnswerLocked && currentQuestion) {
       skipQuestion();
-      
+
       timeoutRef.current = window.setTimeout(() => {
         next();
         timeoutRef.current = null;
@@ -64,10 +66,29 @@ const GamePage: React.FC = () => {
     autoStart: true
   });
 
+  // Збереження результатів при завершенні гри
+  useEffect(() => {
+    if (isFinished && answersHistory.length > 0) {
+      const correct = answersHistory.filter(a => a.isCorrect).length;
+      const total = answersHistory.length;
+      const percent = total > 0 ? Math.round((correct / total) * 100) : 0;
+
+      addResult({
+        score,
+        correct,
+        total,
+        percent,
+        difficulty: 'all', // Можна додати логіку для визначення складності
+        userId: currentUserId
+      });
+
+      setShowGameOverModal(true);
+    }
+  }, [isFinished, answersHistory, score, addResult, currentUserId]);
+
   const handleAnswerSelect = (optionId: string) => {
     selectOption(optionId);
     pause();
-
     if (timeoutRef.current !== null) {
       clearTimeout(timeoutRef.current);
       timeoutRef.current = null;
@@ -85,7 +106,7 @@ const GamePage: React.FC = () => {
 
   const handleNewGame = () => {
     setShowGameOverModal(false);
-    navigate('/');
+    navigate("/");
   };
 
   const handleSaveResults = () => {
@@ -95,12 +116,6 @@ const GamePage: React.FC = () => {
     }));
     navigate('/results');
   };
-
-  useEffect(() => {
-    if (isFinished) {
-      setShowGameOverModal(true);
-    }
-  }, [isFinished]);
 
   useEffect(() => {
     if (currentQuestion) {
@@ -137,16 +152,15 @@ const GamePage: React.FC = () => {
   return (
     <div className="page">
       <Header />
-
       <div className={styles.layout}>
         <div className={styles.info}>
           <ProgressInfo
             current={progress.current}
             total={progress.total}
           />
-          <ScoreBoard score={score}/>
+          <ScoreBoard score={score} />
           <div className={timerClass}>
-            ⏱️ {timeLeft}с {!isRunning && '⏸️'}
+            {timeLeft}c {!isRunning && '⏸️'}
           </div>
         </div>
 
@@ -162,10 +176,10 @@ const GamePage: React.FC = () => {
           />
 
           <div className={styles.debug}>
-            Дебаг: Питання {currentQuestion.id} ({progress.current}/{progress.total}) | 
-            Відповідей: {answersHistory.length} | 
-            Заблоковано: {isAnswerLocked.toString()} | 
-            Час: {timeLeft}с | 
+            Дебаг: Питання {currentQuestion.id} ({progress.current}/{progress.total}) |
+            Відповідей: {answersHistory.length} |
+            Заблоковано: {isAnswerLocked.toString()} |
+            Час: {timeLeft}c |
             Таймер активний: {isRunning.toString()}
           </div>
         </Card>
