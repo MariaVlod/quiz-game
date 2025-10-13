@@ -1,0 +1,62 @@
+.tableContainer {
+  overflow-x: auto;
+  margin-top: 1rem;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.table th,
+.table td {
+  padding: 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.table th {
+  background-color: #f8f9fa;
+  font-weight: 600;
+  color: #495057;
+}
+
+.table tr:hover {
+  background-color: #f8f9fa;
+}
+
+.scoreCell {
+  font-weight: bold;
+  color: #28a745;
+}
+
+.correctCell {
+  color: #28a745;
+}
+
+.percentCell .high {
+  color: #28a745;
+  font-weight: bold;
+}
+
+.percentCell .medium {
+  color: #ffc107;
+  font-weight: bold;
+}
+
+.percentCell .low {
+  color: #dc3545;
+  font-weight: bold;
+}
+
+@media (max-width: 768px) {
+  .table {
+    font-size: 0.8rem;
+  }
+  
+  .table th,
+  .table td {
+    padding: 0.5rem;
+  }
+}
