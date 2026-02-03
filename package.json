@@ -3,12 +3,15 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "license": "MIT",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "license-check": "license-checker --csv --out licenses-report.csv",
+    "license-check-json": "license-checker --json --out licenses-report.json"
   },
   "dependencies": {
     "@types/react-router-dom": "^5.3.3",
@@ -32,6 +35,7 @@
     "eslint-plugin-react-refresh": "^0.4.20",
     "globals": "^16.4.0",
     "husky": "^8.0.0",
+    "license-checker": "^25.0.1",
     "postcss": "^8.5.6",
     "tailwindcss": "^4.1.14",
     "typescript": "~5.8.3",
