@@ -172,16 +172,16 @@ const CookieConsent: React.FC = () => {
           </div>
 
           <div className={styles.buttons}>
-            <Button onClick={handleRejectAll} variant="secondary">
-              Відхилити всі
-            </Button>
-            <Button onClick={handleAcceptSelected} variant="secondary">
-              Прийняти обрані
-            </Button>
-            <Button onClick={handleAcceptAll} variant="primary">
-              Прийняти всі
-            </Button>
-          </div>
+  <Button onClick={handleRejectAll} variant="primary"> 
+    Відхилити всі
+  </Button>
+  <Button onClick={handleAcceptSelected} variant="primary">
+    Прийняти обрані
+  </Button>
+  <Button onClick={handleAcceptAll} variant="primary">
+    Прийняти всі
+  </Button>
+</div>
 
           <div className={styles.privacyLink}>
             <a href="/PRIVACY_POLICY.md" target="_blank" rel="noopener noreferrer">
