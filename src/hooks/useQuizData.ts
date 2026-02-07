@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import type { Question, QuizFilterOptions } from '../types';
+import type { Question } from '../types';
 import { mockQuestions } from '../data/mockQuestions';
 import { useGameStore } from '../store/gameStore';
 

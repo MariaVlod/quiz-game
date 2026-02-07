@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { fn } from '@storybook/test';
 import CookieConsent from './CookieConsent';
 import './CookieConsent.module.css';
 
@@ -16,7 +15,6 @@ const meta: Meta<typeof CookieConsent> = {
     },
   },
   argTypes: {
-    // Component doesn't accept props directly, it manages its own state
   },
 };
 
@@ -24,13 +22,7 @@ export default meta;
 type Story = StoryObj<typeof CookieConsent>;
 
 
-const mockLocalStorage = {
-  getItem: (key: string) => {
-    if (key === 'cookie-consent') return null;
-    return null;
-  },
-  setItem: fn(),
-};
+
 
 const clearLocalStorage = () => {
   if (typeof window !== 'undefined') {

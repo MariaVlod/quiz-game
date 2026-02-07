@@ -7,7 +7,6 @@ import SettingsForm from '../../components/SettingsForm/SettingsForm';
 import Modal from '../../components/Modal/Modal';
 import { useQuizData } from '../../hooks/useQuizData';
 import { useGameStore } from '../../store/gameStore';
-import type { GameSettings } from '../../types';
 import styles from './StartPage.module.css';
 
 const StartPage: React.FC = () => {
