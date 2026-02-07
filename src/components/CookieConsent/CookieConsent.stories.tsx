@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from '@storybook/test';
 import CookieConsent from './CookieConsent';
 import './CookieConsent.module.css';
@@ -23,7 +23,7 @@ const meta: Meta<typeof CookieConsent> = {
 export default meta;
 type Story = StoryObj<typeof CookieConsent>;
 
-// Mock localStorage for Storybook
+
 const mockLocalStorage = {
   getItem: (key: string) => {
     if (key === 'cookie-consent') return null;
@@ -32,7 +32,6 @@ const mockLocalStorage = {
   setItem: fn(),
 };
 
-// Clear localStorage before each story
 const clearLocalStorage = () => {
   if (typeof window !== 'undefined') {
     window.localStorage.removeItem('cookie-consent');
@@ -132,7 +131,6 @@ export const ManageButtonOnly: Story = {
         );
       }
       
-      // Simulate that consent was already given
       return (
         <div style={{ 
           minHeight: '400px', 
@@ -204,7 +202,7 @@ export const InteractiveDemo: Story = {
   ],
 };
 
-// Documentation of component architecture
+
 export const ComponentArchitecture = {
   parameters: {
     docs: {
@@ -265,11 +263,11 @@ const STORAGE_KEY = 'cookie-consent';
 \`\`\`
 
 ### Переваги архітектури:
-- ✅ **Ізоляція**: Незалежний компонент, не залежить від інших частин додатку
-- ✅ **Перевикористання**: Може бути використаний в будь-якому React додатку
-- ✅ **Тестованість**: Легко тестувати через Storybook
-- ✅ **Масштабованість**: Легко додати нові типи cookies
-- ✅ **Доступність**: Відповідає стандартам доступності (a11y)
+-  **Ізоляція**: Незалежний компонент, не залежить від інших частин додатку
+-  **Перевикористання**: Може бути використаний в будь-якому React додатку
+-  **Тестованість**: Легко тестувати через Storybook
+-  **Масштабованість**: Легко додати нові типи cookies
+-  **Доступність**: Відповідає стандартам доступності (a11y)
 `,
       },
     },

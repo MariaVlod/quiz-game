@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useId } from 'react';
+import React, { useState, useEffect, useId, useCallback } from 'react';
 import styles from './CookieConsent.module.css';
 import Button from '../Button/Button';
 import Card from '../Card/Card';
@@ -12,8 +12,16 @@ const CookieConsent: React.FC = () => {
     marketing: false
   });
 
-  // Генеруємо унікальні ID для доступності (a11y)
   const id = useId();
+
+  const applyCookieSettings = useCallback((consentSettings: typeof settings) => {
+    if (consentSettings.analytics) {
+      console.log('Analytics cookies enabled');
+    }
+    if (consentSettings.marketing) {
+      console.log('Marketing cookies enabled');
+    }
+  }, []);
 
   useEffect(() => {
     const consent = localStorage.getItem('cookie-consent');
@@ -29,60 +37,51 @@ const CookieConsent: React.FC = () => {
         setIsVisible(true);
       }
     }
-  }, []);
+  }, [applyCookieSettings]);
 
-  const applyCookieSettings = (consentSettings: typeof settings) => {
-    if (consentSettings.analytics) {
-      console.log('Analytics cookies enabled');
-    }
-    if (consentSettings.marketing) {
-      console.log('Marketing cookies enabled');
-    }
-  };
-
-  const saveSettings = (newSettings: typeof settings) => {
+  const saveSettings = useCallback((newSettings: typeof settings) => {
     localStorage.setItem('cookie-consent', JSON.stringify(newSettings));
     setSettings(newSettings);
     applyCookieSettings(newSettings);
     setIsVisible(false);
-  };
+  }, [applyCookieSettings]);
 
-  const handleAcceptAll = () => {
+  const handleAcceptAll = useCallback(() => {
     saveSettings({
       necessary: true,
       functional: true,
       analytics: true,
       marketing: true
     });
-  };
+  }, [saveSettings]);
 
-  const handleAcceptSelected = () => {
+  const handleAcceptSelected = useCallback(() => {
     saveSettings({
       ...settings,
       necessary: true
     });
-  };
+  }, [saveSettings, settings]);
 
-  const handleRejectAll = () => {
+  const handleRejectAll = useCallback(() => {
     saveSettings({
       necessary: true,
       functional: false,
       analytics: false,
       marketing: false
     });
-  };
+  }, [saveSettings]);
 
-  const handleToggle = (type: keyof typeof settings) => {
+  const handleToggle = useCallback((type: keyof typeof settings) => {
     if (type === 'necessary') return;
     setSettings(prev => ({
       ...prev,
       [type]: !prev[type]
     }));
-  };
+  }, []);
 
-  const handleManageCookies = () => {
+  const handleManageCookies = useCallback(() => {
     setIsVisible(true);
-  };
+  }, []);
 
   if (!isVisible) {
     return (
@@ -109,7 +108,6 @@ const CookieConsent: React.FC = () => {
           </div>
 
           <div className={styles.cookieTypes}>
-            {/* Необхідні cookies */}
             <div className={`${styles.cookieType} ${styles.necessary}`}>
               <div className={styles.cookieHeader}>
                 <h3>Необхідні cookies</h3>
@@ -128,7 +126,6 @@ const CookieConsent: React.FC = () => {
               </div>
             </div>
 
-            {/* Функціональні cookies */}
             <div className={styles.cookieType}>
               <div className={styles.cookieHeader}>
                 <h3>Функціональні cookies</h3>
@@ -147,7 +144,6 @@ const CookieConsent: React.FC = () => {
               </div>
             </div>
 
-            {/* Аналітичні cookies */}
             <div className={styles.cookieType}>
               <div className={styles.cookieHeader}>
                 <h3>Аналітичні cookies</h3>
@@ -166,7 +162,6 @@ const CookieConsent: React.FC = () => {
               </div>
             </div>
 
-            {/* Маркетингові cookies */}
             <div className={styles.cookieType}>
               <div className={styles.cookieHeader}>
                 <h3>Маркетингові cookies</h3>

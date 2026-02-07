@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from '@storybook/test';
 import Button from '../Button/Button';
 import './Button.module.css';
@@ -172,7 +172,6 @@ export const ResetButton: Story = {
   },
 };
 
-// Interactive demonstration
 export const InteractiveDemo: Story = {
   args: {
     variant: 'primary',
@@ -187,7 +186,6 @@ export const InteractiveDemo: Story = {
   },
 };
 
-// Button in context
 export const InContext: Story = {
   args: {
     variant: 'primary',
@@ -245,7 +243,7 @@ export const InContext: Story = {
   },
 };
 
-// Accessibility showcase
+
 export const Accessibility: Story = {
   args: {
     variant: 'primary',
@@ -286,7 +284,6 @@ export const Accessibility: Story = {
   },
 };
 
-// Documentation of component API
 export const ComponentAPI = {
   parameters: {
     docs: {
@@ -298,13 +295,13 @@ export const ComponentAPI = {
 
 | Пропс | Тип | Обов'язковий | Значення за замовчуванням | Опис |
 |-------|-----|-------------|---------------------------|------|
-| \`children\` | \`React.ReactNode\` | ✅ | - | Вміст кнопки (текст, іконка) |
-| \`variant\` | \`'primary' \\| 'secondary'\` | ❌ | \`'primary'\` | Варіант стилю кнопки |
-| \`size\` | \`'small' \\| 'medium' \\| 'large'\` | ❌ | \`'medium'\` | Розмір кнопки |
-| \`disabled\` | \`boolean\` | ❌ | \`false\` | Чи відключена кнопка |
-| \`type\` | \`'button' \\| 'submit' \\| 'reset'\` | ❌ | \`'button'\` | HTML атрибут type |
-| \`onClick\` | \`() => void\` | ❌ | - | Обробник кліку |
-| \`className\` | \`string\` | ❌ | \`''\` | Додаткові CSS класи |
+| \`children\` | \`React.ReactNode\` | так | - | Вміст кнопки (текст, іконка) |
+| \`variant\` | \`'primary' \\| 'secondary'\` | ні | \`'primary'\` | Варіант стилю кнопки |
+| \`size\` | \`'small' \\| 'medium' \\| 'large'\` | ні | \`'medium'\` | Розмір кнопки |
+| \`disabled\` | \`boolean\` | ні | \`false\` | Чи відключена кнопка |
+| \`type\` | \`'button' \\| 'submit' \\| 'reset'\` | ні | \`'button'\` | HTML атрибут type |
+| \`onClick\` | \`() => void\` | ні | - | Обробник кліку |
+| \`className\` | \`string\` | ні | \`''\` | Додаткові CSS класи |
 
 ### Приклади використання:
 

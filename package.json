@@ -13,7 +13,8 @@
     "license-check": "license-checker --csv --out licenses-report.csv",
     "license-check-json": "license-checker --json --out licenses-report.json",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "test": "echo \"No tests yet\""
   },
   "dependencies": {
     "@types/react-router-dom": "^5.3.3",
