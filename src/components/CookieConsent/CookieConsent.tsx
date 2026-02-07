@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useId } from 'react';
 import styles from './CookieConsent.module.css';
 import Button from '../Button/Button';
 import Card from '../Card/Card';
@@ -12,71 +12,68 @@ const CookieConsent: React.FC = () => {
     marketing: false
   });
 
+  // Генеруємо унікальні ID для доступності (a11y)
+  const id = useId();
+
   useEffect(() => {
     const consent = localStorage.getItem('cookie-consent');
     if (!consent) {
       setIsVisible(true);
     } else {
-      const savedSettings = JSON.parse(consent);
-      setSettings(savedSettings);
-      applyCookieSettings(savedSettings);
+      try {
+        const savedSettings = JSON.parse(consent);
+        setSettings(savedSettings);
+        applyCookieSettings(savedSettings);
+      } catch (e) {
+        console.error('Помилка при зчитуванні cookies:', e);
+        setIsVisible(true);
+      }
     }
   }, []);
 
   const applyCookieSettings = (consentSettings: typeof settings) => {
-    // Apply analytics cookies if consented
     if (consentSettings.analytics) {
-      // Initialize analytics (mock implementation)
       console.log('Analytics cookies enabled');
     }
-    
-    // Apply marketing cookies if consented
     if (consentSettings.marketing) {
       console.log('Marketing cookies enabled');
     }
   };
 
-  const handleAcceptAll = () => {
-    const allAccepted = {
-      necessary: true,
-      functional: true,
-      analytics: true,
-      marketing: true
-    };
-    
-    localStorage.setItem('cookie-consent', JSON.stringify(allAccepted));
-    setSettings(allAccepted);
-    applyCookieSettings(allAccepted);
-    setIsVisible(false);
-  };
-
-  const handleAcceptSelected = () => {
-    const newSettings = {
-      ...settings,
-      necessary: true // Always required
-    };
-    
+  const saveSettings = (newSettings: typeof settings) => {
     localStorage.setItem('cookie-consent', JSON.stringify(newSettings));
+    setSettings(newSettings);
     applyCookieSettings(newSettings);
     setIsVisible(false);
   };
 
+  const handleAcceptAll = () => {
+    saveSettings({
+      necessary: true,
+      functional: true,
+      analytics: true,
+      marketing: true
+    });
+  };
+
+  const handleAcceptSelected = () => {
+    saveSettings({
+      ...settings,
+      necessary: true
+    });
+  };
+
   const handleRejectAll = () => {
-    const onlyNecessary = {
-      necessary: true, // Cannot be rejected
+    saveSettings({
+      necessary: true,
       functional: false,
       analytics: false,
       marketing: false
-    };
-    
-    localStorage.setItem('cookie-consent', JSON.stringify(onlyNecessary));
-    setSettings(onlyNecessary);
-    applyCookieSettings(onlyNecessary);
-    setIsVisible(false);
+    });
   };
 
   const handleToggle = (type: keyof typeof settings) => {
-    if (type === 'necessary') return; // Cannot toggle necessary cookies
+    if (type === 'necessary') return;
     setSettings(prev => ({
       ...prev,
       [type]: !prev[type]
@@ -88,11 +85,15 @@ const CookieConsent: React.FC = () => {
   };
 
   if (!isVisible) {
-    // Show small cookie icon for managing cookies
     return (
-      <div className={styles.manageButton} onClick={handleManageCookies}>
+      <button 
+        className={styles.manageButton} 
+        onClick={handleManageCookies}
+        aria-label="Налаштування cookies"
+        title="Налаштування cookies"
+      >
         🍪
-      </div>
+      </button>
     );
   }
 
@@ -108,6 +109,7 @@ const CookieConsent: React.FC = () => {
           </div>
 
           <div className={styles.cookieTypes}>
+            {/* Необхідні cookies */}
             <div className={`${styles.cookieType} ${styles.necessary}`}>
               <div className={styles.cookieHeader}>
                 <h3>Необхідні cookies</h3>
@@ -116,15 +118,17 @@ const CookieConsent: React.FC = () => {
               <p>Необхідні для роботи гри. Не можуть бути відключені.</p>
               <div className={styles.toggle}>
                 <input
+                  id={`${id}-necessary`}
                   type="checkbox"
                   checked={settings.necessary}
                   disabled
                   onChange={() => {}}
                 />
-                <label>Завжди ввімкнено</label>
+                <label htmlFor={`${id}-necessary`}>Завжди ввімкнено</label>
               </div>
             </div>
 
+            {/* Функціональні cookies */}
             <div className={styles.cookieType}>
               <div className={styles.cookieHeader}>
                 <h3>Функціональні cookies</h3>
@@ -132,56 +136,67 @@ const CookieConsent: React.FC = () => {
               <p>Зберігають ваші налаштування гри та результати.</p>
               <div className={styles.toggle}>
                 <input
+                  id={`${id}-functional`}
                   type="checkbox"
                   checked={settings.functional}
                   onChange={() => handleToggle('functional')}
                 />
-                <label>{settings.functional ? 'Ввімкнено' : 'Вимкнено'}</label>
+                <label htmlFor={`${id}-functional`}>
+                  {settings.functional ? 'Ввімкнено' : 'Вимкнено'}
+                </label>
               </div>
             </div>
 
+            {/* Аналітичні cookies */}
             <div className={styles.cookieType}>
               <div className={styles.cookieHeader}>
                 <h3>Аналітичні cookies</h3>
               </div>
-              <p>Допомагають нам покращувати гру, збираючи анонімні дані про використання.</p>
+              <p>Допомагають нам покращувати гру, збираючи анонімні дані.</p>
               <div className={styles.toggle}>
                 <input
+                  id={`${id}-analytics`}
                   type="checkbox"
                   checked={settings.analytics}
                   onChange={() => handleToggle('analytics')}
                 />
-                <label>{settings.analytics ? 'Ввімкнено' : 'Вимкнено'}</label>
+                <label htmlFor={`${id}-analytics`}>
+                  {settings.analytics ? 'Ввімкнено' : 'Вимкнено'}
+                </label>
               </div>
             </div>
 
+            {/* Маркетингові cookies */}
             <div className={styles.cookieType}>
               <div className={styles.cookieHeader}>
                 <h3>Маркетингові cookies</h3>
               </div>
-              <p>Використовуються для показу реклами (поки не використовуються).</p>
+              <p>Використовуються для показу реклами.</p>
               <div className={styles.toggle}>
                 <input
+                  id={`${id}-marketing`}
                   type="checkbox"
                   checked={settings.marketing}
                   onChange={() => handleToggle('marketing')}
                 />
-                <label>{settings.marketing ? 'Ввімкнено' : 'Вимкнено'}</label>
+                <label htmlFor={`${id}-marketing`}>
+                  {settings.marketing ? 'Ввімкнено' : 'Вимкнено'}
+                </label>
               </div>
             </div>
           </div>
 
           <div className={styles.buttons}>
-  <Button onClick={handleRejectAll} variant="primary"> 
-    Відхилити всі
-  </Button>
-  <Button onClick={handleAcceptSelected} variant="primary">
-    Прийняти обрані
-  </Button>
-  <Button onClick={handleAcceptAll} variant="primary">
-    Прийняти всі
-  </Button>
-</div>
+            <Button onClick={handleRejectAll} variant="primary"> 
+              Відхилити всі
+            </Button>
+            <Button onClick={handleAcceptSelected} variant="primary">
+              Прийняти обрані
+            </Button>
+            <Button onClick={handleAcceptAll} variant="primary">
+              Прийняти всі
+            </Button>
+          </div>
 
           <div className={styles.privacyLink}>
             <a href="/PRIVACY_POLICY.md" target="_blank" rel="noopener noreferrer">
