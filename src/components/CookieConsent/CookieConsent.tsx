@@ -3,8 +3,26 @@ import styles from './CookieConsent.module.css';
 import Button from '../Button/Button';
 import Card from '../Card/Card';
 
+/**
+ * Компонент для відображення банера згоди на використання файлів cookie.
+ * Підтримує налаштування різних категорій (функціональні, аналітичні, маркетингові тощо).
+ * Автоматично зберігає налаштування в localStorage та відновлює їх при наступному відвідуванні.
+ * Надає інтерфейс для детального управління cookie-налаштуваннями та кнопки швидких дій.
+ */
 const CookieConsent: React.FC = () => {
+  /**
+   * Стан для контролю видимості модального вікна з налаштуваннями cookies.
+   * @default false - компонент спочатку не видимий
+   */
   const [isVisible, setIsVisible] = useState(false);
+
+  /**
+   * Об'єкт налаштувань для різних категорій cookies.
+   * @property {boolean} necessary - Необхідні cookies (завжди активні, не можуть бути відключені)
+   * @property {boolean} functional - Функціональні cookies (зберігають налаштування гри)
+   * @property {boolean} analytics - Аналітичні cookies (збирають анонімні дані для покращення)
+   * @property {boolean} marketing - Маркетингові cookies (використовуються для персоналізованої реклами)
+   */
   const [settings, setSettings] = useState({
     necessary: true,
     functional: false,
@@ -12,8 +30,16 @@ const CookieConsent: React.FC = () => {
     marketing: false
   });
 
+  /**
+   * Генерує унікальний ID для компонента, використовується для зв'язки input/label.
+   * @returns {string} Унікальний ідентифікатор
+   */
   const id = useId();
 
+  /**
+   * Застосовує налаштування cookies, імітуючи ініціалізацію відповідних сервісів.
+   * @param {typeof settings} consentSettings - Об'єкт з налаштуваннями cookies
+   */
   const applyCookieSettings = useCallback((consentSettings: typeof settings) => {
     if (consentSettings.analytics) {
       console.log('Analytics cookies enabled');
@@ -23,6 +49,10 @@ const CookieConsent: React.FC = () => {
     }
   }, []);
 
+  /**
+   * Ефект, який перевіряє наявність збережених налаштувань cookies при завантаженні компонента.
+   * Якщо налаштування не знайдено - показує банер згоди.
+   */
   useEffect(() => {
     const consent = localStorage.getItem('cookie-consent');
     if (!consent) {
@@ -39,6 +69,10 @@ const CookieConsent: React.FC = () => {
     }
   }, [applyCookieSettings]);
 
+  /**
+   * Зберігає налаштування cookies в localStorage, застосовує їх та приховує модальне вікно.
+   * @param {typeof settings} newSettings - Нові налаштування для збереження
+   */
   const saveSettings = useCallback((newSettings: typeof settings) => {
     localStorage.setItem('cookie-consent', JSON.stringify(newSettings));
     setSettings(newSettings);
@@ -46,6 +80,10 @@ const CookieConsent: React.FC = () => {
     setIsVisible(false);
   }, [applyCookieSettings]);
 
+  /**
+   * Обробник для прийняття всіх типів cookies.
+   * Вмикає всі категорії крім обов'язкових (які завжди ввімкнені).
+   */
   const handleAcceptAll = useCallback(() => {
     saveSettings({
       necessary: true,
@@ -55,6 +93,10 @@ const CookieConsent: React.FC = () => {
     });
   }, [saveSettings]);
 
+  /**
+   * Обробник для прийняття лише обраних користувачем cookies.
+   * Зберігає поточні налаштування, гарантуючи, що необхідні cookies залишаться ввімкненими.
+   */
   const handleAcceptSelected = useCallback(() => {
     saveSettings({
       ...settings,
@@ -62,6 +104,10 @@ const CookieConsent: React.FC = () => {
     });
   }, [saveSettings, settings]);
 
+  /**
+   * Обробник для відхилення всіх необов'язкових cookies.
+   * Залишає активними лише необхідні cookies для функціонування сайту.
+   */
   const handleRejectAll = useCallback(() => {
     saveSettings({
       necessary: true,
@@ -71,6 +117,11 @@ const CookieConsent: React.FC = () => {
     });
   }, [saveSettings]);
 
+  /**
+   * Перемикач для окремих категорій cookies.
+   * @param {keyof typeof settings} type - Тип cookies для перемикання
+   * @throws Не дозволяє змінювати стан необхідних cookies
+   */
   const handleToggle = useCallback((type: keyof typeof settings) => {
     if (type === 'necessary') return;
     setSettings(prev => ({
@@ -79,6 +130,10 @@ const CookieConsent: React.FC = () => {
     }));
   }, []);
 
+  /**
+   * Обробник для повторного відкриття модального вікна управління cookies.
+   * Використовується кнопкою в вигляді іконки cookie, коли основне вікно приховане.
+   */
   const handleManageCookies = useCallback(() => {
     setIsVisible(true);
   }, []);
