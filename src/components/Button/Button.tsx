@@ -5,7 +5,7 @@ import styles from './Button.module.css';
  * Інтерфейс для властивостей кнопки.
  * @interface ButtonProps
  */
-interface ButtonProps {
+export interface ButtonProps {
   /** Вміст кнопки (текст, іконка або їх комбінація) */
   children: React.ReactNode;
   /** Обробник події натискання на кнопку */

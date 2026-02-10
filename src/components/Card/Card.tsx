@@ -7,7 +7,7 @@ import styles from './Card.module.css';
  * 
  * @interface CardProps
  */
-interface CardProps {
+export interface CardProps {
   /** Вміст картки (будь-які React елементи) */
   children: React.ReactNode;
   /** Додаткові CSS класи для кастомізації зовнішнього вигляду */

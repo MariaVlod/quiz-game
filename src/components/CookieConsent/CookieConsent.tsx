@@ -3,18 +3,36 @@ import styles from './CookieConsent.module.css';
 import Button from '../Button/Button';
 import Card from '../Card/Card';
 
+interface CookieConsentProps {
+  /** Примусово показати модалку (для тестування) */
+  forceShow?: boolean;
+  /** Початкові налаштування (для тестування) */
+  initialSettings?: {
+    necessary: boolean;
+    functional: boolean;
+    analytics: boolean;
+    marketing: boolean;
+  };
+  /** Читати з localStorage (за замовчуванням true) */
+  useLocalStorage?: boolean;
+}
+
 /**
  * Компонент для відображення банера згоди на використання файлів cookie.
  * Підтримує налаштування різних категорій (функціональні, аналітичні, маркетингові тощо).
  * Автоматично зберігає налаштування в localStorage та відновлює їх при наступному відвідуванні.
  * Надає інтерфейс для детального управління cookie-налаштуваннями та кнопки швидких дій.
  */
-const CookieConsent: React.FC = () => {
+export const CookieConsent: React.FC<CookieConsentProps> = ({
+  forceShow = false,
+  initialSettings,
+  useLocalStorage = true
+}) => {
   /**
    * Стан для контролю видимості модального вікна з налаштуваннями cookies.
    * @default false - компонент спочатку не видимий
    */
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(forceShow);
 
   /**
    * Об'єкт налаштувань для різних категорій cookies.
@@ -23,11 +41,19 @@ const CookieConsent: React.FC = () => {
    * @property {boolean} analytics - Аналітичні cookies (збирають анонімні дані для покращення)
    * @property {boolean} marketing - Маркетингові cookies (використовуються для персоналізованої реклами)
    */
-  const [settings, setSettings] = useState({
-    necessary: true,
-    functional: false,
-    analytics: false,
-    marketing: false
+  const [settings, setSettings] = useState(() => {
+    // Якщо передані початкові налаштування - використовуємо їх
+    if (initialSettings) {
+      return initialSettings;
+    }
+    
+    // За замовчуванням - тільки необхідні cookies
+    return {
+      necessary: true,
+      functional: false,
+      analytics: false,
+      marketing: false
+    };
   });
 
   /**
@@ -54,6 +80,11 @@ const CookieConsent: React.FC = () => {
    * Якщо налаштування не знайдено - показує банер згоди.
    */
   useEffect(() => {
+    // Якщо вимкнено localStorage або передані початкові налаштування - пропускаємо
+    if (!useLocalStorage || initialSettings) {
+      return;
+    }
+
     const consent = localStorage.getItem('cookie-consent');
     if (!consent) {
       setIsVisible(true);
@@ -67,18 +98,20 @@ const CookieConsent: React.FC = () => {
         setIsVisible(true);
       }
     }
-  }, [applyCookieSettings]);
+  }, [useLocalStorage, initialSettings, applyCookieSettings]);
 
   /**
    * Зберігає налаштування cookies в localStorage, застосовує їх та приховує модальне вікно.
    * @param {typeof settings} newSettings - Нові налаштування для збереження
    */
   const saveSettings = useCallback((newSettings: typeof settings) => {
-    localStorage.setItem('cookie-consent', JSON.stringify(newSettings));
+    if (useLocalStorage) {
+      localStorage.setItem('cookie-consent', JSON.stringify(newSettings));
+    }
     setSettings(newSettings);
     applyCookieSettings(newSettings);
     setIsVisible(false);
-  }, [applyCookieSettings]);
+  }, [applyCookieSettings, useLocalStorage]);
 
   /**
    * Обробник для прийняття всіх типів cookies.
@@ -138,17 +171,33 @@ const CookieConsent: React.FC = () => {
     setIsVisible(true);
   }, []);
 
+  // Якщо примусово показати - показуємо модалку
+  useEffect(() => {
+    if (forceShow) {
+      setIsVisible(true);
+    }
+  }, [forceShow]);
+
   if (!isVisible) {
-    return (
-      <button 
-        className={styles.manageButton} 
-        onClick={handleManageCookies}
-        aria-label="Налаштування cookies"
-        title="Налаштування cookies"
-      >
-        🍪
-      </button>
-    );
+    // Перевіряємо, чи є хоча б одне налаштування крім необхідних
+    const hasAnySettings = settings.functional || settings.analytics || settings.marketing;
+    
+    // Показуємо кнопку управління тільки якщо є налаштування
+    if (hasAnySettings || !useLocalStorage) {
+      return (
+        <button
+          className={styles.manageButton}
+          onClick={handleManageCookies}
+          aria-label="Налаштування cookies"
+          title="Налаштування cookies"
+        >
+          🍪
+        </button>
+      );
+    }
+    
+    // Якщо ніяких налаштувань немає - не показуємо нічого
+    return null;
   }
 
   return (
@@ -158,7 +207,7 @@ const CookieConsent: React.FC = () => {
           <h2>🍪 Налаштування cookies</h2>
           
           <div className={styles.description}>
-            <p>Ми використовуємо cookies для покращення вашого досвіду. 
+            <p>Ми використовуємо cookies для покращення вашого досвіду.
             Будь ласка, оберіть, які cookies ви дозволяєте.</p>
           </div>
 
@@ -237,7 +286,7 @@ const CookieConsent: React.FC = () => {
           </div>
 
           <div className={styles.buttons}>
-            <Button onClick={handleRejectAll} variant="primary"> 
+            <Button onClick={handleRejectAll} variant="primary">
               Відхилити всі
             </Button>
             <Button onClick={handleAcceptSelected} variant="primary">

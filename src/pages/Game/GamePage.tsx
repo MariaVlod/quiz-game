@@ -199,6 +199,7 @@ const GamePage: React.FC = () => {
         onClose={() => setShowGameOverModal(false)}
         score={score}
         answersHistory={answersHistory}
+        totalQuestions={questions.length}
         onRestart={handleRestart}
         onNewGame={handleNewGame}
         onSaveResults={handleSaveResults}

@@ -2,7 +2,7 @@ import React from 'react';
 import type { GameResult } from '../../store/gameStore';
 import styles from './ResultsTable.module.css';
 
-interface ResultsTableProps {
+export interface ResultsTableProps {
   results: GameResult[];
 }
 

@@ -3,7 +3,13 @@ import type { Question } from '../types';
 import { mockQuestions } from '../data/mockQuestions';
 import { useGameStore } from '../store/gameStore';
 
-// ✅ Функція для перемішування масиву
+/**
+ * Універсальна функція для перемішування масиву (алгоритм Фішера-Єйтса).
+ * Використовується для випадкового порядку питань та варіантів відповідей.
+ * * @param array Вхідний масив будь-якого типу
+ * @returns Новий перемішаний масив
+ */
+
 export const shuffleArray = <T>(array: T[]): T[] => {
   const shuffled = [...array];
   for (let i = shuffled.length - 1; i > 0; i--) {
@@ -13,7 +19,12 @@ export const shuffleArray = <T>(array: T[]): T[] => {
   return shuffled;
 };
 
-
+/**
+ * Перемішує варіанти відповідей всередині кожного питання.
+ * Це гарантує, що правильна відповідь не буде завжди на одному й тому ж місці.
+ * * @param questions Масив питань
+ * @returns Масив питань з перемішаними варіантами відповідей
+ */
 export const shuffleQuestions = (questions: Question[]): Question[] => {
   return questions.map(question => ({
     ...question,

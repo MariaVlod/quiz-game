@@ -1,0 +1,26 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "entryPointStrategy": "expand",
+  "entryPoints": ["src"],
+  "out": "docs",
+  "name": "Кіно-Вікторина - Документація",
+  "exclude": [
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "**/*.stories.tsx",
+    "src/stories/**",
+    "src/vite-env.d.ts",
+    "**/*.csv",
+    "**/*.css"
+  ],
+  "theme": "default",
+  "includeVersion": true,
+  "excludePrivate": true,
+  "excludeProtected": true,
+  "categorizeByGroup": true,
+  "hideGenerator": true,
+  "cleanOutputDir": true,
+  "searchInComments": true,
+  "skipErrorChecking": true,
+  "customCss": "./src/styles/typedoc.css"
+}

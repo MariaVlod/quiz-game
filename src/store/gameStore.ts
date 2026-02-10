@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { GameSettings, AnswerHistory } from '../types';
+import type { GameSettings } from '../types';
 
 export interface GameResult {
   id: string;
@@ -35,7 +35,7 @@ const defaultSettings: GameSettings = {
 
 export const useGameStore = create<GameState>()(
   persist(
-    (set, get) => ({
+    (set, _get) => ({
       // Початковий стан
       settings: defaultSettings,
       results: [],

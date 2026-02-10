@@ -1,19 +1,51 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useGameStore } from '../store/gameStore';
 
-interface UseTimerProps {
+/**
+ * Параметри для налаштування таймера.
+ */
+export interface UseTimerProps {
+  /**
+   * Функція зворотного виклику, яка спрацьовує, коли час вичерпано.
+   */
   onExpire?: () => void;
+  /**
+   * Чи запускати таймер автоматично після ініціалізації.
+   * @default false
+   */
   autoStart?: boolean;
 }
-
-interface UseTimerReturn {
+/**
+ * Об'єкт, який повертає хук useTimer.
+ * Містить поточний стан часу та методи керування ним.
+ */
+export interface UseTimerReturn {
+  /** Поточний час, що залишився (в секундах). */
   timeLeft: number;
+  /** Чи активний зараз таймер (відлік йде). */
   isRunning: boolean;
+  /** Запустити таймер. */
   start: () => void;
+  /** Призупинити таймер. */
   pause: () => void;
+  /** Призупинити таймер. */
   reset: () => void;
 }
 
+/**
+ * Хук для створення таймера зворотного відліку.
+ * Використовує налаштування глобального стору гри (gameStore) для визначення тривалості.
+ * * @param props Налаштування таймера {@link UseTimerProps}
+ * @returns Об'єкт з станом та методами керування {@link UseTimerReturn}
+ * * @example
+ * ```tsx
+ * const { timeLeft, start, pause, reset } = useTimer({
+ * onExpire: () => console.log('Час вийшов!'),
+ * autoStart: true
+ * });
+ * * return <div>Залишилось часу: {timeLeft} сек</div>
+ * ```
+ */
 export const useTimer = (
   { onExpire, autoStart = false }: UseTimerProps
 ): UseTimerReturn => {

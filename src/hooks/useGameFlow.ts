@@ -2,27 +2,49 @@ import { useState, useCallback, useEffect } from 'react';
 import type { Question, AnswerHistory, GameConfig } from '../types';
 import { calculateScore } from '../utils/scoring';
 
-interface UseGameFlowReturn {
+/**
+ * Інтерфейс, що описує значення, які повертає хук useGameFlow.
+ * Містить поточний стан гри та методи керування процесом.
+ */
+export interface UseGameFlowReturn {
   // Стан
+  /** Поточний індекс питання (починається з 0) */
   currentIndex: number;
+  /** Об'єкт поточного питання або null */
   currentQuestion: Question | null;
+/** ID обраної відповіді користувача */
   selectedOptionId: string | null;
+/** Масив історії всіх відповідей */
   answersHistory: AnswerHistory[];
+/** Поточний рахунок гравця */
   score: number;
+/** Чи завершена гра */
   isFinished: boolean;
+  /** Чи заблокована можливість відповідати (після вибору варіанту) */
   isAnswerLocked: boolean;
 
   // Методи
+
+  /** Функція вибору варіанту відповіді */
   selectOption: (optionId: string) => void;
+  /** Функція пропуску поточного питання */
   skipQuestion: () => void;
+  /** Перехід до наступного питання */
   next: () => void;
+  /** Перехід до наступного питання */
   restart: () => void;
+  /** Отримання прогресу гри (поточне/всього) */
   getProgress: () => { current: number; total: number };
 }
-
+/**
+ * Хук для управління логікою проходження вікторини.
+ * Відповідає за перемикання питань, підрахунок балів та збереження історії.
+ * * @param questions Масив питань для гри
+ * @param _config Конфігурація гри (опціонально)
+ */
 export const useGameFlow = (
   questions: Question[],
-  config: GameConfig = {}
+  _config: GameConfig = {}
 ): UseGameFlowReturn => {
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [selectedOptionId, setSelectedOptionId] = useState<string | null>(null);

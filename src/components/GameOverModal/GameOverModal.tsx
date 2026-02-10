@@ -9,7 +9,7 @@ import type { AnswerHistory } from '../../types';
  * Визначає всі необхідні параметри для відображення модального вікна завершення гри.
  * @interface GameOverModalProps
  */
-interface GameOverModalProps {
+export interface GameOverModalProps {
   /** Чи відкрито модальне вікно */
   isOpen: boolean;
   /** Callback-функція для закриття модального вікна */

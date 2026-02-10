@@ -7,7 +7,7 @@ import Card from '../Card/Card';
 import { useGameStore } from '../../store/gameStore';
 import styles from './SettingsForm.module.css';
 
-interface SettingsFormProps {
+export interface SettingsFormProps {
   onCancel?: () => void;
 }
 
