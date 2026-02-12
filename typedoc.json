@@ -4,6 +4,7 @@
   "entryPoints": ["src"],
   "out": "docs",
   "name": "Кіно-Вікторина - Документація",
+  "readme": "./README.md",
   "exclude": [
     "**/*.test.ts",
     "**/*.test.tsx",
