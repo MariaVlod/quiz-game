@@ -9,12 +9,62 @@ import { useQuizData } from '../../hooks/useQuizData';
 import { useGameStore } from '../../store/gameStore';
 import styles from './StartPage.module.css';
 
+/**
+ * Головна сторінка додатку - сторінка старту гри.
+ * Відображає вітальне повідомлення, поточні налаштування, правила гри
+ * та основні дії: початок гри, налаштування, профіль.
+ * 
+ * @component
+ * @returns {JSX.Element} Стартова сторінка з налаштуваннями та кнопками дій
+ * 
+ * @example
+ * // Використання в маршрутизаторі
+ * <Route path="/" element={<StartPage />} />
+ * 
+ * @remarks
+ * Компонент є вхідною точкою гри. Тут відбувається:
+ * - Завантаження питань через хук `useQuizData`
+ * - Відображення поточних налаштувань з глобального стану
+ * - Управління модальним вікном налаштувань
+ * - Навігація до сторінки гри або профілю
+ * 
+ * @see {@link useQuizData} для завантаження питань
+ * @see {@link useGameStore} для роботи з налаштуваннями
+ * @see {@link SettingsForm} для форми налаштувань
+ * @see {@link Modal} для модального вікна
+ */
 const StartPage: React.FC = () => {
   const navigate = useNavigate();
+  
+  /**
+   * Отримує налаштування гри з глобального стану.
+   * @type {GameSettings}
+   */
   const { settings } = useGameStore();
+  
+  /**
+   * Хук для завантаження питань на основі поточних налаштувань.
+   * @type {Object}
+   * @property {Question[]} questions - Масив завантажених питань
+   * @property {boolean} loading - Стан завантаження
+   * @property {Error | null} error - Помилка завантаження (якщо є)
+   * @property {Function} reload - Функція повторного завантаження
+   */
   const { questions, loading, error, reload } = useQuizData();
+  
+  /**
+   * Стан видимості модального вікна з налаштуваннями.
+   * @type {boolean}
+   */
   const [showSettings, setShowSettings] = useState(false);
 
+  /**
+   * Обробник початку гри.
+   * Зберігає питання в sessionStorage та перенаправляє на сторінку гри.
+   * 
+   * @function
+   * @private
+   */
   const handleStart = () => {
     if (questions.length > 0) {
       sessionStorage.setItem('quizQuestions', JSON.stringify(questions));
@@ -22,10 +72,17 @@ const StartPage: React.FC = () => {
     }
   };
 
+  /**
+   * Обробник відкриття модального вікна налаштувань.
+   */
   const handleShowSettings = () => {
     setShowSettings(true);
   };
 
+  /**
+   * Обробник переходу на сторінку профілю користувача.
+   * Отримує поточний ID користувача з глобального стану.
+   */
   const handleUserProfile = () => {
     const userId = useGameStore.getState().currentUserId;
     navigate(`/user/${userId}`);
@@ -112,6 +169,20 @@ const StartPage: React.FC = () => {
   );
 };
 
+/**
+ * Перетворює код складності на читабельний текст для інтерфейсу.
+ * 
+ * @function
+ * @param {string} difficulty - Код складності ('easy', 'medium', 'hard', 'all')
+ * @returns {string} Локалізована назва складності
+ * 
+ * @example
+ * getDifficultyLabel('easy') // Повертає 'Легка'
+ * getDifficultyLabel('hard') // Повертає 'Складна'
+ * getDifficultyLabel('all')  // Повертає 'Всі'
+ * 
+ * @private
+ */
 function getDifficultyLabel(difficulty: string): string {
   const labels: { [key: string]: string } = {
     easy: 'Легка',
