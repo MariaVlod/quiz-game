@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './ScoreBoard.module.css';
 
-interface ScoreBoardProps {
+export interface ScoreBoardProps {
   score: number;
 }
 

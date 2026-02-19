@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './Question.module.css';
 
-interface QuestionProps {
+export interface QuestionProps {
   text: string;
 }
 

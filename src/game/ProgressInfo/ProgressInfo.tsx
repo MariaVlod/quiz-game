@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './ProgressInfo.module.css';
 
-interface ProgressInfoProps {
+export interface ProgressInfoProps {
   current: number;
   total: number;
 }

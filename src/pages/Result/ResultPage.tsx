@@ -9,12 +9,54 @@ import { useGameStore } from '../../store/gameStore';
 import type { AnswerHistory } from '../../types';
 import styles from './ResultPage.module.css';
 
+/**
+ * Сторінка результатів гри.
+ * Відображає детальну статистику завершеної гри, включаючи бали,
+ * правильні/неправильні відповіді, пропущені питання та загальну успішність.
+ * 
+ * @component
+ * @returns {JSX.Element} Сторінка з результатами гри
+ * 
+ * @example
+ * // Використання в маршрутизаторі
+ * <Route path="/results" element={<ResultPage />} />
+ * 
+ * @remarks
+ * Компонент отримує результати поточної гри з sessionStorage,
+ * а також показує історію всіх результатів з глобального стану.
+ * Автоматично перенаправляє на головну сторінку, якщо результатів немає.
+ * 
+ * @see {@link useResults} для розрахунку статистики
+ * @see {@link ResultsTable} для відображення історії результатів
+ * @see {@link useGameStore} для роботи з глобальним станом результатів
+ */
 const ResultPage: React.FC = () => {
   const navigate = useNavigate();
+  
+  /**
+   * Отримує результати ігор та метод очищення з глобального стану.
+   * @type {Object}
+   * @property {GameResult[]} results - Масив всіх результатів користувача
+   * @property {Function} clearResults - Метод для очищення історії результатів
+   */
   const { results, clearResults } = useGameStore();
+  
+  /**
+   * Стан для зберігання балів поточної гри.
+   * @type {number}
+   */
   const [score, setScore] = useState(0);
+  
+  /**
+   * Стан для зберігання історії відповідей поточної гри.
+   * @type {AnswerHistory[]}
+   */
   const [answersHistory, setAnswersHistory] = useState<AnswerHistory[]>([]);
 
+  /**
+   * Ефект для завантаження результатів поточної гри з sessionStorage.
+   * Якщо результатів немає, перенаправляє на головну сторінку.
+   */
   useEffect(() => {
     const savedResults = sessionStorage.getItem('quizResults');
     if (savedResults) {
@@ -26,8 +68,25 @@ const ResultPage: React.FC = () => {
     }
   }, [navigate]);
 
+  /**
+   * Розрахунок статистики поточної гри.
+   * Використовує хук useResults для отримання детальних показників.
+   * 
+   * @type {Object}
+   * @property {number} total - Загальна кількість питань
+   * @property {number} correct - Кількість правильних відповідей
+   * @property {number} incorrect - Кількість неправильних відповідей
+   * @property {number} skipped - Кількість пропущених питань
+   * @property {number} percent - Відсоток правильних відповідей
+   */
   const { total, correct, incorrect, skipped, percent } = useResults(answersHistory);
 
+  /**
+   * Повертає мотивуюче повідомлення на основі результатів гри.
+   * 
+   * @returns {string} Персоналізоване повідомлення для користувача
+   * @private
+   */
   const getResultMessage = () => {
     if (correct === total) return "Ідеально! Ти кінознавець екстра-класу! 🎉";
     if (percent >= 80) return "Вітаю! Ти справжній кінознавець! 👍";
@@ -36,6 +95,12 @@ const ResultPage: React.FC = () => {
     return "Спробуй ще раз! Ти зможеш краще! 💪";
   };
 
+  /**
+   * Повертає емодзі, що відповідає рівню успішності.
+   * 
+   * @returns {string} Емодзі для відображення
+   * @private
+   */
   const getResultEmoji = () => {
     if (correct === total) return "🏆";
     if (percent >= 80) return "⭐";
@@ -44,19 +109,35 @@ const ResultPage: React.FC = () => {
     return "💪";
   };
 
+  /**
+   * Обробник для перезапуску поточної гри.
+   * Перенаправляє на сторінку гри без зміни налаштувань.
+   */
   const handleRestart = () => {
     navigate('/game');
   };
 
+  /**
+   * Обробник для початку нової гри.
+   * Перенаправляє на головну сторінку для вибору нових налаштувань.
+   */
   const handleNewGame = () => {
     navigate("/");
   };
 
+  /**
+   * Обробник для переходу на сторінку профілю користувача.
+   * Отримує поточний ID користувача з глобального стану.
+   */
   const handleUserProfile = () => {
     const userId = useGameStore.getState().currentUserId;
     navigate(`/user/${userId}`);
   };
 
+  /**
+   * Обробник для очищення історії результатів.
+   * Показує підтвердження перед видаленням даних.
+   */
   const handleClearResults = () => {
     if (window.confirm('Ви впевнені, що хочете очистити історію результатів?')) {
       clearResults();
@@ -122,7 +203,10 @@ const ResultPage: React.FC = () => {
           </div>
 
           <p className={styles.summary}>
-            {correct > 0 ? `Ти правильно відповів на ${correct} з ${total} запитань` : 'На жаль, ти не дав жодної правильної відповіді'}
+            {correct > 0 
+              ? `Ти правильно відповів на ${correct} з ${total} запитань` 
+              : 'На жаль, ти не дав жодної правильної відповіді'
+            }
             {skipped > 0 && ` (пропущено ${skipped} питань)`}
             {incorrect > 0 && `, неправильних відповідей: ${incorrect}`}
           </p>

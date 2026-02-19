@@ -3,12 +3,20 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+    "author": "Mariia Vlodzianovska",
+  "license": "MIT",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "license-check": "license-checker --csv --out licenses-report.csv",
+    "license-check-json": "license-checker --json --out licenses-report.json",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build",
+    "test": "echo \"No tests yet\"",
+    "docs": "typedoc"
   },
   "dependencies": {
     "@types/react-router-dom": "^5.3.3",
@@ -20,22 +28,36 @@
     "zustand": "^5.0.8"
   },
   "devDependencies": {
+    "@chromatic-com/storybook": "^5.0.0",
     "@eslint/js": "^9.36.0",
+    "@storybook/addon-a11y": "^10.2.6",
+    "@storybook/addon-docs": "^10.2.6",
+    "@storybook/addon-vitest": "^10.2.6",
+    "@storybook/react-vite": "^10.2.6",
+    "@storybook/test": "^8.6.15",
     "@types/react": "^19.1.13",
     "@types/react-dom": "^19.1.9",
     "@types/yup": "^0.29.14",
     "@vitejs/plugin-react": "^5.0.3",
+    "@vitest/browser-playwright": "^4.0.18",
+    "@vitest/coverage-v8": "^4.0.18",
     "autoprefixer": "^10.4.21",
     "babel-plugin-react-compiler": "^19.1.0-rc.3",
     "eslint": "^9.36.0",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",
+    "eslint-plugin-storybook": "^10.2.6",
     "globals": "^16.4.0",
     "husky": "^8.0.0",
+    "license-checker": "^25.0.1",
+    "playwright": "^1.58.1",
     "postcss": "^8.5.6",
+    "storybook": "^10.2.6",
     "tailwindcss": "^4.1.14",
+    "typedoc": "^0.28.16",
     "typescript": "~5.8.3",
     "typescript-eslint": "^8.44.0",
-    "vite": "^7.1.7"
+    "vite": "^7.1.7",
+    "vitest": "^4.0.18"
   }
 }

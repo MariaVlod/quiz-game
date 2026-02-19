@@ -5,7 +5,7 @@ import type { QuestionOption } from '../../types';
 // 👇 Імпортуємо стилі як об'єкт `styles`
 import styles from './AnswerOption.module.css';
 
-interface AnswerOptionProps {
+export interface AnswerOptionProps {
   answer: QuestionOption;
   index: number;
   isSelected?: boolean;

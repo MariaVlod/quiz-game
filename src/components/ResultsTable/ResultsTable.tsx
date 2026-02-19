@@ -2,11 +2,64 @@ import React from 'react';
 import type { GameResult } from '../../store/gameStore';
 import styles from './ResultsTable.module.css';
 
-interface ResultsTableProps {
+/**
+ * Інтерфейс властивостей компонента ResultsTable.
+ * 
+ * @interface ResultsTableProps
+ */
+export interface ResultsTableProps {
+  /** Масив результатів ігор для відображення в таблиці */
   results: GameResult[];
 }
 
+/**
+ * Компонент для відображення історії результатів ігор у вигляді таблиці.
+ * Показує дату, бали, кількість правильних відповідей, загальну кількість питань,
+ * відсоток успішності та складність для кожної гри.
+ * 
+ * @component
+ * @param {ResultsTableProps} props - Властивості компонента
+ * @returns {JSX.Element} Таблиця з результатами ігор
+ * 
+ * @example
+ * // Базове використання
+ * <ResultsTable results={gameResults} />
+ * 
+ * @example
+ * // Використання з даними
+ * const results = [
+ *   {
+ *     id: '123',
+ *     score: 500,
+ *     correct: 5,
+ *     total: 10,
+ *     percent: 50,
+ *     date: '2024-01-15T10:30:00',
+ *     difficulty: 'medium',
+ *     userId: '1'
+ *   }
+ * ];
+ * <ResultsTable results={results} />
+ * 
+ * @remarks
+ * Компонент автоматично сортує результати за датою (від найновіших до найстаріших).
+ * Відсоток успішності відображається з кольоровим маркуванням:
+ * - Зелений (high): ≥80%
+ * - Жовтий (medium): 60-79%
+ * - Червоний (low): <60%
+ */
 const ResultsTable: React.FC<ResultsTableProps> = ({ results }) => {
+  /**
+   * Форматує дату у локальний формат для відображення.
+   * 
+   * @param {string} dateString - Рядок з датою в ISO форматі
+   * @returns {string} Відформатована дата (дд.мм.рррр гг:хв)
+   * 
+   * @example
+   * formatDate('2024-01-15T10:30:00') // Повертає '15.01.2024 10:30'
+   * 
+   * @private
+   */
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('uk-UA', {
       day: '2-digit',
@@ -17,6 +70,19 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results }) => {
     });
   };
 
+  /**
+   * Перетворює код складності на читабельну назву українською мовою.
+   * 
+   * @param {string} difficulty - Код складності ('easy', 'medium', 'hard', 'all')
+   * @returns {string} Локалізована назва складності
+   * 
+   * @example
+   * getDifficultyLabel('easy')   // Повертає 'Легка'
+   * getDifficultyLabel('hard')   // Повертає 'Складна'
+   * getDifficultyLabel('custom') // Повертає 'custom' (якщо немає відповідності)
+   * 
+   * @private
+   */
   const getDifficultyLabel = (difficulty: string) => {
     const labels: { [key: string]: string } = {
       easy: 'Легка',
@@ -28,7 +94,7 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results }) => {
   };
 
   if (results.length === 0) {
-    return <p>Немає результатів для відображення</p>;
+    return <p className={styles.emptyMessage}>Немає результатів для відображення</p>;
   }
 
   return (
@@ -54,7 +120,15 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results }) => {
                 <td className={styles.correctCell}>{result.correct}</td>
                 <td>{result.total}</td>
                 <td className={styles.percentCell}>
-                  <span className={result.percent >= 80 ? styles.high : result.percent >= 60 ? styles.medium : styles.low}>
+                  <span 
+                    className={
+                      result.percent >= 80 
+                        ? styles.high 
+                        : result.percent >= 60 
+                          ? styles.medium 
+                          : styles.low
+                    }
+                  >
                     {result.percent}%
                   </span>
                 </td>

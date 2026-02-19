@@ -3,7 +3,7 @@ import AnswerOption from '../AnswerOption/AnswerOption';
 import type { QuestionOption } from '../../types';
 import styles from './AnswerList.module.css';
 
-interface AnswerListProps {
+export interface AnswerListProps {
   answers: QuestionOption[];
   selectedOptionId?: string | null;
   correctOptionId?: string;

@@ -1,0 +1,167 @@
+<!DOCTYPE html><html class="default" lang="en" data-base="./"><head><meta charset="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>Кіно-Вікторина - Документація - v0.0.0</title><meta name="description" content="Documentation for Кіно-Вікторина - Документація"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="assets/style.css"/><link rel="stylesheet" href="assets/highlight.css"/><link rel="stylesheet" href="assets/custom.css"/><script defer src="assets/main.js"></script><script async src="assets/icons.js" id="tsd-icons-script"></script><script async src="assets/search.js" id="tsd-search-script"></script><script async src="assets/navigation.js" id="tsd-nav-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os";document.body.style.display="none";setTimeout(() => window.app?app.showPage():document.body.style.removeProperty("display"),500)</script><header class="tsd-page-toolbar"><div class="tsd-toolbar-contents container"><a href="index.html" class="title">Кіно-Вікторина - Документація - v0.0.0</a><div id="tsd-toolbar-links"></div><button id="tsd-search-trigger" class="tsd-widget" aria-label="Search"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="assets/icons.svg#icon-search"></use></svg></button><dialog id="tsd-search" aria-label="Search"><input role="combobox" id="tsd-search-input" aria-controls="tsd-search-results" aria-autocomplete="list" aria-expanded="true" autocapitalize="off" autocomplete="off" placeholder="Search the docs" maxLength="100"/><ul role="listbox" id="tsd-search-results"></ul><div id="tsd-search-status" aria-live="polite" aria-atomic="true"><div>Preparing search index...</div></div></dialog><a href="#" class="tsd-widget menu" id="tsd-toolbar-menu-trigger" data-toggle="menu" aria-label="Menu"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="assets/icons.svg#icon-menu"></use></svg></a></div></header><div class="container container-main"><div class="col-content"><div class="tsd-page-title"><h1>Кіно-Вікторина - Документація - v0.0.0</h1></div><div class="tsd-panel tsd-typography"><h1 id="кіно-вікторина-quiz-app" class="tsd-anchor-link">Кіно-Вікторина (Quiz-app)<a href="#кіно-вікторина-quiz-app" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h1>
+<p><strong>Кіно-Вікторина</strong>  — це професійний навчальний проєкт, розроблений для демонстрації навичок створення сучасних React-додатків з використанням Zustand, TypeScript та Storybook.</p>
+<h2 id="мета-проєкту-purpose" class="tsd-anchor-link">Мета проєкту (Purpose)<a href="#мета-проєкту-purpose" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<p>Цей проєкт був створений для вирішення наступних завдань:</p>
+<ul>
+<li>
+<p>Ефективне керування станом: Використання Zustand як легкої альтернативи Redux Toolkit.</p>
+</li>
+<li>
+<p>Компонентна ізоляція: Розробка інтерфейсу через Storybook для забезпечення перевикористання коду.</p>
+</li>
+<li>
+<p>Типізація: Забезпечення стабільності коду через строгу типізацію TypeScript.</p>
+</li>
+<li>
+<p>Автоматизація: Налаштування CI/CD процесів через Husky та автоматичну генерацію документації.</p>
+</li>
+</ul>
+<h2 id="налаштування-гри" class="tsd-anchor-link">Налаштування гри<a href="#налаштування-гри" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<p>Перед початком гри ви можете налаштувати параметри під свій рівень:</p>
+<table>
+<thead>
+<tr>
+<th>Налаштування</th>
+<th>Опис</th>
+<th>Діапазон</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Кількість питань</strong></td>
+<td>Скільки запитань буде у вікторині</td>
+<td>1–15</td>
+</tr>
+<tr>
+<td><strong>Складність</strong></td>
+<td>Рівень складності питань</td>
+<td>Легка / Середня / Складна / Всі</td>
+</tr>
+<tr>
+<td><strong>Час на відповідь</strong></td>
+<td>Скільки секунд дається на одне питання</td>
+<td>5–60 сек</td>
+</tr>
+</tbody>
+</table>
+<h3 id="детальніше-про-складність" class="tsd-anchor-link">Детальніше про складність:<a href="#детальніше-про-складність" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<ul>
+<li><strong>Легка</strong> — загальновідомі факти про популярні фільми</li>
+<li><strong>Середня</strong> — питання для справжніх кіноманів</li>
+<li><strong>Складна</strong> — для експертів, які знають деталі та історію кіно</li>
+<li><strong>Всі</strong> — випадкові питання різного рівня</li>
+</ul>
+<hr>
+<h2 id="правила-гри" class="tsd-anchor-link">Правила гри<a href="#правила-гри" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<ol>
+<li><strong>Старт:</strong> Натисніть кнопку &quot;Почати гру&quot; на головному екрані після вибору налаштувань.</li>
+<li><strong>Таймер:</strong> На кожне питання відведено час, який ви обрали в налаштуваннях.
+<ul>
+<li>Якщо час спливає — питання автоматично пропускається.</li>
+<li>Після вибору відповіді таймер зупиняється.</li>
+</ul>
+</li>
+<li><strong>Відповіді:</strong> Оберіть одну правильну відповідь із 4 варіантів.
+<ul>
+<li>Правильна відповідь — +100 балів</li>
+<li>Неправильна відповідь — 0 балів</li>
+<li>️ Пропущене питання — 0 балів</li>
+</ul>
+</li>
+<li><strong>Прогрес:</strong> Відстежуйте поточне питання та кількість набраних балів.</li>
+<li><strong>Результат:</strong> Після завершення всіх питань ви побачите:
+<ul>
+<li>Загальний рахунок</li>
+<li>Кількість правильних/неправильних/пропущених відповідей</li>
+<li>Відсоток успішності</li>
+<li>Історію всіх ігор</li>
+</ul>
+</li>
+</ol>
+<h2 id="швидкий-старт" class="tsd-anchor-link">Швидкий старт<a href="#швидкий-старт" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<h4 id="встановлення" class="tsd-anchor-link">Встановлення<a href="#встановлення" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h4>
+<h4 id="клонування-репозиторію" class="tsd-anchor-link">Клонування репозиторію<a href="#клонування-репозиторію" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h4>
+<pre><code><span class="hl-0">git</span><span class="hl-1"> </span><span class="hl-0">clone</span><span class="hl-1"> </span><span class="hl-2">https</span><span class="hl-1">:</span><span class="hl-3">//github.com/MariaVlod/quiz-game.git</span>
+</code><button>Copy</button></pre>
+
+<h4 id="встановлення-залежностей" class="tsd-anchor-link">Встановлення залежностей<a href="#встановлення-залежностей" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h4>
+<pre><code><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-0">install</span>
+</code><button>Copy</button></pre>
+
+<h4 id="запуск-у-режимі-розробки" class="tsd-anchor-link">Запуск у режимі розробки<a href="#запуск-у-режимі-розробки" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h4>
+<pre><code><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-0">run</span><span class="hl-1"> </span><span class="hl-0">dev</span>
+</code><button>Copy</button></pre>
+
+<h2 id="документація-documentation" class="tsd-anchor-link">Документація (Documentation)<a href="#документація-documentation" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<p>Повна документація доступна у двох форматах:</p>
+<ol>
+<li>Локально: Згенеровані TypeDoc файли знаходяться у папці /docs.</li>
+<li>Онлайн: Ви можете переглянути документацію прямо в браузері:
+<a href="">ВІДКРИТИ ОНЛАЙН ДОКУМЕНТАЦІЮ</a></li>
+</ol>
+<h2 id="структура-проєкту" class="tsd-anchor-link">Структура проєкту<a href="#структура-проєкту" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<p>Архітектура проєкту побудована за модульним принципом:</p>
+<pre><code><span class="hl-0">my</span><span class="hl-1">-</span><span class="hl-0">quiz</span><span class="hl-1">-</span><span class="hl-0">app</span><span class="hl-1">/</span><br/><span class="hl-1">├── </span><span class="hl-0">src</span><span class="hl-1">/</span><br/><span class="hl-1">│   ├── </span><span class="hl-0">components</span><span class="hl-1">/          # </span><span class="hl-0">React</span><span class="hl-1"> </span><span class="hl-0">компоненти</span><br/><span class="hl-1">│   │   ├── </span><span class="hl-0">Button</span><span class="hl-1">/          # </span><span class="hl-0">Універсальна</span><span class="hl-1"> </span><span class="hl-0">кнопка</span><br/><span class="hl-1">│   │   ├── </span><span class="hl-0">Card</span><span class="hl-1">/            # </span><span class="hl-0">Картка</span><span class="hl-1"> </span><span class="hl-0">контейнер</span><br/><span class="hl-1">│   │   ├── </span><span class="hl-0">Header</span><span class="hl-1">/          # </span><span class="hl-0">Заголовок</span><span class="hl-1"> </span><span class="hl-0">з</span><span class="hl-1"> </span><span class="hl-0">навігацією</span><br/><span class="hl-1">│   │   ├── </span><span class="hl-0">Modal</span><span class="hl-1">/           # </span><span class="hl-0">Модальне</span><span class="hl-1"> </span><span class="hl-0">вікно</span><br/><span class="hl-1">│   │   ├── </span><span class="hl-0">SettingsForm</span><span class="hl-1">/    # </span><span class="hl-0">Форма</span><span class="hl-1"> </span><span class="hl-0">налаштувань</span><br/><span class="hl-1">│   │   └── </span><span class="hl-0">CookieConsent</span><span class="hl-1">/   # </span><span class="hl-4">GDPR</span><span class="hl-1"> </span><span class="hl-0">Cookie</span><span class="hl-1"> </span><span class="hl-0">popup</span><br/><span class="hl-1">│   │</span><br/><span class="hl-1">│   ├── </span><span class="hl-0">pages</span><span class="hl-1">/                # </span><span class="hl-0">Сторінки</span><span class="hl-1"> </span><span class="hl-0">додатку</span><br/><span class="hl-1">│   │   ├── </span><span class="hl-0">StartPage</span><span class="hl-1">/        # </span><span class="hl-0">Головна</span><span class="hl-1"> </span><span class="hl-0">сторінка</span><span class="hl-1"> </span><span class="hl-0">з</span><span class="hl-1"> </span><span class="hl-0">налаштуваннями</span><br/><span class="hl-1">│   │   ├── </span><span class="hl-0">GamePage</span><span class="hl-1">/         # </span><span class="hl-0">Сторінка</span><span class="hl-1"> </span><span class="hl-0">гри</span><br/><span class="hl-1">│   │   ├── </span><span class="hl-0">ResultPage</span><span class="hl-1">/       # </span><span class="hl-0">Сторінка</span><span class="hl-1"> </span><span class="hl-0">результатів</span><br/><span class="hl-1">│   │   ├── </span><span class="hl-0">UserProfilePage</span><span class="hl-1">/  # </span><span class="hl-0">Профіль</span><span class="hl-1"> </span><span class="hl-0">користувача</span><br/><span class="hl-1">│   │   └── </span><span class="hl-0">UsersListPage</span><span class="hl-1">/    # </span><span class="hl-0">Список</span><span class="hl-1"> </span><span class="hl-0">користувачів</span><br/><span class="hl-1">│   │</span><br/><span class="hl-1">│   ├── </span><span class="hl-0">game</span><span class="hl-1">/                  # </span><span class="hl-0">Ігрові</span><span class="hl-1"> </span><span class="hl-0">компоненти</span><br/><span class="hl-1">│   │   ├── </span><span class="hl-0">Question</span><span class="hl-1">/          # </span><span class="hl-0">Текст</span><span class="hl-1"> </span><span class="hl-0">питання</span><br/><span class="hl-1">│   │   ├── </span><span class="hl-0">AnswerList</span><span class="hl-1">/        # </span><span class="hl-0">Список</span><span class="hl-1"> </span><span class="hl-0">відповідей</span><br/><span class="hl-1">│   │   ├── </span><span class="hl-0">AnswerOption</span><span class="hl-1">/      # </span><span class="hl-0">Окремий</span><span class="hl-1"> </span><span class="hl-0">варіант</span><span class="hl-1"> </span><span class="hl-0">відповіді</span><br/><span class="hl-1">│   │   ├── </span><span class="hl-0">ProgressInfo</span><span class="hl-1">/      # </span><span class="hl-0">Індикатор</span><span class="hl-1"> </span><span class="hl-0">прогресу</span><br/><span class="hl-1">│   │   └── </span><span class="hl-0">ScoreBoard</span><span class="hl-1">/        # </span><span class="hl-0">Табло</span><span class="hl-1"> </span><span class="hl-0">рахунку</span><br/><span class="hl-1">│   │</span><br/><span class="hl-1">│   ├── </span><span class="hl-0">store</span><span class="hl-1">/                  # </span><span class="hl-0">Zustand</span><span class="hl-1"> </span><span class="hl-0">стейт</span><span class="hl-1">-</span><span class="hl-0">менеджмент</span><br/><span class="hl-1">│   │   └── </span><span class="hl-0">gameStore</span><span class="hl-1">.</span><span class="hl-0">ts</span><span class="hl-1">        # </span><span class="hl-0">Глобальний</span><span class="hl-1"> </span><span class="hl-0">стан</span><br/><span class="hl-1">│   │</span><br/><span class="hl-1">│   ├── </span><span class="hl-0">hooks</span><span class="hl-1">/                   # </span><span class="hl-0">Кастомні</span><span class="hl-1"> </span><span class="hl-0">хуки</span><br/><span class="hl-1">│   │   ├── </span><span class="hl-0">useQuizData</span><span class="hl-1">.</span><span class="hl-0">ts</span><span class="hl-1">       # </span><span class="hl-0">Завантаження</span><span class="hl-1"> </span><span class="hl-0">питань</span><br/><span class="hl-1">│   │   ├── </span><span class="hl-0">useGameFlow</span><span class="hl-1">.</span><span class="hl-0">ts</span><span class="hl-1">       # </span><span class="hl-0">Логіка</span><span class="hl-1"> </span><span class="hl-0">гри</span><br/><span class="hl-1">│   │   ├── </span><span class="hl-0">useTimer</span><span class="hl-1">.</span><span class="hl-0">ts</span><span class="hl-1">          # </span><span class="hl-0">Таймер</span><br/><span class="hl-1">│   │   └── </span><span class="hl-0">useResults</span><span class="hl-1">.</span><span class="hl-0">ts</span><span class="hl-1">        # </span><span class="hl-0">Обробка</span><span class="hl-1"> </span><span class="hl-0">результатів</span><br/><span class="hl-1">│   │</span><br/><span class="hl-1">│   ├── </span><span class="hl-0">types</span><span class="hl-1">/                    # </span><span class="hl-0">TypeScript</span><span class="hl-1"> </span><span class="hl-0">типи</span><br/><span class="hl-1">│   │   └── </span><span class="hl-0">index</span><span class="hl-1">.</span><span class="hl-0">ts</span><br/><span class="hl-1">│   │</span><br/><span class="hl-1">│   ├── </span><span class="hl-0">routes</span><span class="hl-1">/                    # </span><span class="hl-0">Маршрутизація</span><br/><span class="hl-1">│   │   └── </span><span class="hl-0">AppRouter</span><span class="hl-1">.</span><span class="hl-0">tsx</span><br/><span class="hl-1">│   │</span><br/><span class="hl-1">│   ├── </span><span class="hl-0">data</span><span class="hl-1">/                      # </span><span class="hl-0">Мок</span><span class="hl-1">-</span><span class="hl-0">дані</span><br/><span class="hl-1">│   │   └── </span><span class="hl-0">mockQuestions</span><span class="hl-1">.</span><span class="hl-0">ts</span><span class="hl-1">       # </span><span class="hl-0">Питання</span><span class="hl-1"> </span><span class="hl-0">про</span><span class="hl-1"> </span><span class="hl-0">фільми</span><br/><span class="hl-1">│   │</span><br/><span class="hl-1">│   ├── </span><span class="hl-0">styles</span><span class="hl-1">/                     # </span><span class="hl-0">Глобальні</span><span class="hl-1"> </span><span class="hl-0">стилі</span><br/><span class="hl-1">│   │   └── </span><span class="hl-0">index</span><span class="hl-1">.</span><span class="hl-0">css</span><br/><span class="hl-1">│   │</span><br/><span class="hl-1">│   ├── </span><span class="hl-0">App</span><span class="hl-1">.</span><span class="hl-0">tsx</span><span class="hl-1">                     # </span><span class="hl-0">Кореневий</span><span class="hl-1"> </span><span class="hl-0">компонент</span><br/><span class="hl-1">│   └── </span><span class="hl-0">main</span><span class="hl-1">.</span><span class="hl-0">tsx</span><span class="hl-1">                    # </span><span class="hl-0">Точка</span><span class="hl-1"> </span><span class="hl-0">входу</span><br/><span class="hl-1">│</span><br/><span class="hl-1">├── </span><span class="hl-0">docs</span><span class="hl-1">/                           # </span><span class="hl-0">Згенерована</span><span class="hl-1"> </span><span class="hl-0">документація</span><br/><span class="hl-1">├── .</span><span class="hl-0">storybook</span><span class="hl-1">/                     # </span><span class="hl-0">Storybook</span><span class="hl-1"> </span><span class="hl-0">конфігурація</span><br/><span class="hl-1">├── </span><span class="hl-0">public</span><span class="hl-1">/                          # </span><span class="hl-0">Статичні</span><span class="hl-1"> </span><span class="hl-0">файли</span><br/><span class="hl-1">├── </span><span class="hl-4">LICENSE</span><span class="hl-1">                          # </span><span class="hl-0">Ліцензія</span><span class="hl-1"> </span><span class="hl-4">MIT</span><br/><span class="hl-1">├── </span><span class="hl-4">PRIVACY_POLICY</span><span class="hl-1">.</span><span class="hl-0">md</span><span class="hl-1">                # </span><span class="hl-0">Політика</span><span class="hl-1"> </span><span class="hl-0">конфіденційності</span><br/><span class="hl-1">├── </span><span class="hl-4">EULA</span><span class="hl-1">.</span><span class="hl-0">md</span><span class="hl-1">                          # </span><span class="hl-0">Угода</span><span class="hl-1"> </span><span class="hl-0">з</span><span class="hl-1"> </span><span class="hl-0">користувачем</span><br/><span class="hl-1">├── </span><span class="hl-0">licenses</span><span class="hl-1">-</span><span class="hl-0">report</span><span class="hl-1">.</span><span class="hl-0">md</span><span class="hl-1">               # </span><span class="hl-0">Звіт</span><span class="hl-1"> </span><span class="hl-0">про</span><span class="hl-1"> </span><span class="hl-0">ліцензії</span><br/><span class="hl-1">└── </span><span class="hl-4">README</span><span class="hl-1">.</span><span class="hl-0">md</span><span class="hl-1">                        # </span><span class="hl-0">Цей</span><span class="hl-1"> </span><span class="hl-0">файл</span>
+</code><button>Copy</button></pre>
+
+<h2 id="що-включено-whats-included" class="tsd-anchor-link">Що включено (What's Included)<a href="#що-включено-whats-included" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<p>Проєкт містить повний набір інструментів для розробки та аналізу:</p>
+<ul>
+<li>
+<p>Game Core: Компоненти Question та AnswerList для керування ігровою логікою.</p>
+</li>
+<li>
+<p>UI-Kit: Документовані компоненти в Storybook.</p>
+</li>
+<li>
+<p>Compliance: Модулі згоди на використання Cookies та вбудована Політика конфіденційності.</p>
+</li>
+<li>
+<p>Reports: Автоматично згенеровані звіти про ліцензії використаних бібліотек (JSON/CSV).</p>
+</li>
+</ul>
+<h2 id="доступні-команди" class="tsd-anchor-link">Доступні команди<a href="#доступні-команди" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<pre><code><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-0">run</span><span class="hl-1"> </span><span class="hl-0">dev</span>
+</code><button>Copy</button></pre>
+
+<p>Запуск сервера розробки Vite.</p>
+<pre><code><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-0">run</span><span class="hl-1"> </span><span class="hl-0">build</span>
+</code><button>Copy</button></pre>
+
+<p>Збірка проєкту для продакшну.</p>
+<pre><code><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-0">run</span><span class="hl-1"> </span><span class="hl-0">storybook</span>
+</code><button>Copy</button></pre>
+
+<p>Запуск середовища розробки UI-компонентів.</p>
+<pre><code><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-0">run</span><span class="hl-1"> </span><span class="hl-0">docs</span>
+</code><button>Copy</button></pre>
+
+<p>Генерація технічної документації проєкту.</p>
+<pre><code><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-0">test</span>
+</code><button>Copy</button></pre>
+
+<p>Запуск Vitest для перевірки коду.</p>
+<h2 id="автор" class="tsd-anchor-link">Автор<a href="#автор" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<ul>
+<li>
+<p>Mariia Vlodzianovska</p>
+</li>
+<li>
+<p>GitHub: <a href="https://github.com/MariaVlod">https://github.com/MariaVlod</a></p>
+</li>
+<li>
+<p>Email: <a href="mailto:ipz234_vma@student.ztu.edu.ua">ipz234_vma@student.ztu.edu.ua</a></p>
+</li>
+</ul>
+<h2 id="ліцензія-license" class="tsd-anchor-link">Ліцензія (License)<a href="#ліцензія-license" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<p>Цей проєкт ліцензовано на умовах MIT License.</p>
+<p>Ви можете вільно використовувати, копіювати та змінювати цей код за умови збереження повідомлення про авторські права.</p>
+<p>Детальніше читайте у повному тексті ліцензії:</p>
+<ul>
+<li><a href="media/LICENSE">LICENSE</a></li>
+<li><a href="media/EULA.md">ПЕРЕГЛЯНУТИ EULA</a></li>
+<li><a href="media/PRIVACY_POLICY.md">ПЕРЕГЛЯНУТИ PRIVACY POLICY</a></li>
+</ul>
+<h2 id="внесок-contributing" class="tsd-anchor-link">Внесок (Contributing)<a href="#внесок-contributing" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<p>Будемо раді вашим пропозиціям! Перед створенням Pull Request, будь ласка, запустіть npm run lint для перевірки стилю коду.</p>
+</div></div><div class="col-sidebar"><div class="page-menu"><div class="tsd-navigation settings"><details class="tsd-accordion"><summary class="tsd-accordion-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="assets/icons.svg#icon-chevronDown"></use></svg><h3>Settings</h3></summary><div class="tsd-accordion-details"><div class="tsd-filter-visibility"><span class="settings-label">Member Visibility</span><ul id="tsd-filter-options"><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-inherited" name="inherited" checked/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Inherited</span></label></li><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-external" name="external"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>External</span></label></li></ul></div><div class="tsd-theme-toggle"><label class="settings-label" for="tsd-theme">Theme</label><select id="tsd-theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></div></div></details></div><details open class="tsd-accordion tsd-page-navigation"><summary class="tsd-accordion-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="assets/icons.svg#icon-chevronDown"></use></svg><h3>On This Page</h3></summary><div class="tsd-accordion-details"><a href="#кіно-вікторина-quiz-app"><span>Кіно-<wbr/>Вікторина (<wbr/>Quiz-<wbr/>app)</span></a><ul><li><a href="#мета-проєкту-purpose"><span>Мета проєкту (<wbr/>Purpose)</span></a></li><li><a href="#налаштування-гри"><span>Налаштування гри</span></a></li><li><ul><li><a href="#детальніше-про-складність"><span>Детальніше про складність:</span></a></li></ul></li><li><a href="#правила-гри"><span>Правила гри</span></a></li><li><a href="#швидкий-старт"><span>Швидкий старт</span></a></li><li><ul><li><ul><li><a href="#встановлення"><span>Встановлення</span></a></li><li><a href="#клонування-репозиторію"><span>Клонування репозиторію</span></a></li><li><a href="#встановлення-залежностей"><span>Встановлення залежностей</span></a></li><li><a href="#запуск-у-режимі-розробки"><span>Запуск у режимі розробки</span></a></li></ul></li></ul></li><li><a href="#документація-documentation"><span>Документація (<wbr/>Documentation)</span></a></li><li><a href="#структура-проєкту"><span>Структура проєкту</span></a></li><li><a href="#що-включено-whats-included"><span>Що включено (<wbr/>What&#39;s <wbr/>Included)</span></a></li><li><a href="#доступні-команди"><span>Доступні команди</span></a></li><li><a href="#автор"><span>Автор</span></a></li><li><a href="#ліцензія-license"><span>Ліцензія (<wbr/>License)</span></a></li><li><a href="#внесок-contributing"><span>Внесок (<wbr/>Contributing)</span></a></li></ul></div></details></div><div class="site-menu"><nav class="tsd-navigation"><a href="modules.html">Кіно-Вікторина - Документація - v0.0.0</a><ul class="tsd-small-nested-navigation" id="tsd-nav-container"><li>Loading...</li></ul></nav></div></div></div><footer></footer><div class="overlay"></div></body></html>
